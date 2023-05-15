@@ -37,6 +37,13 @@
             {
               "client_id": "417701020381-ek67nmfle60jlfnpgug90cc01hipnj6l.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "417701020381-g37ubj0fo7d4cvve3ej7vtl1e00kkcc3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.hkmhyderabad.harekrishnagoldentemple"
+              }
             }
           ]
         }
