@@ -8,6 +8,7 @@ import 'package:harekrishnagoldentemple/Home/widgets/carousel_with_indicator.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:harekrishnagoldentemple/Music/music.dart';
+import 'package:harekrishnagoldentemple/Notifications.dart';
 import 'package:harekrishnagoldentemple/Prabhupada/prabhupada_entry.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Darshans.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Ekadashi_Reminders.dart';
@@ -62,10 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.notifications_none_rounded,
                 size: 22, color: Colors.black),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => NotificationScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Notifications()),
+              );
             },
           ),
         ],
