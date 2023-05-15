@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "417701020381",
+    "project_id": "hare-krishna-golden-temp-b1785",
+    "storage_bucket": "hare-krishna-golden-temp-b1785.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417701020381:android:803c40bcfe7adfb28b1134",
+        "android_client_info": {
+          "package_name": "org.hkmhyderabad.harekrishnagoldentemple"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417701020381-v5fqc0ok8aii79ehbthh87l3hepetd0v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.hkmhyderabad.harekrishnagoldentemple",
+            "certificate_hash": "54fbf43e22b2486be2e3eca6431ff97bb39e9dac"
+          }
+        },
+        {
+          "client_id": "417701020381-ek67nmfle60jlfnpgug90cc01hipnj6l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX8H22E5UfT4TrgR6rGqpo3w9KXfLXhuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417701020381-ek67nmfle60jlfnpgug90cc01hipnj6l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

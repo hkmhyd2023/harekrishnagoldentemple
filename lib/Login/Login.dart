@@ -1,9 +1,9 @@
 import 'package:country_calling_code_picker/picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:harekrishnagoldentemple/Home/home.dart';
 import 'package:harekrishnagoldentemple/Login/otp_login.dart';
-import 'package:harekrishnagoldentemple/Login/Register.dart';
 import 'package:harekrishnagoldentemple/Login/utils/constant.dart';
 import 'package:harekrishnagoldentemple/Login/utils/widgets.dart';
 
@@ -21,6 +21,7 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final _loginFormKey = GlobalKey<FormState>();
+  TextEditingController phonecontroller = TextEditingController();
   double screenHeight = 0.0;
   double screenWidth = 0.0;
 
@@ -65,83 +66,94 @@ class _LogInState extends State<LogIn> {
     screenWidth = MediaQuery.of(context).size.width;
 
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle(statusBarIconBrightness: true ? Brightness.light : Brightness.dark),
+      value: SystemUiOverlayStyle(
+          statusBarIconBrightness: true ? Brightness.light : Brightness.dark),
       child: Scaffold(
         body: SingleChildScrollView(
           padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Space(60),
-                  Text("Welcome back!", style: TextStyle(fontSize: mainTitleTextSize, fontWeight: FontWeight.bold)),
-                  Space(8),
-                  Text("Please Login to your account", style: TextStyle(fontSize: 14, color: subTitle)),
-                  Space(16),
-                  Image.asset(gopuram, width: 150, height: 150, fit: BoxFit.cover),
-                ],
-              ),
-              Space(70),
-              Form(
-                key: _loginFormKey,
-                child: TextFormField(
-                  keyboardType: TextInputType.phone,
-                  style: TextStyle(fontSize: 16),
-                  inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                  decoration: commonInputDecoration(
-                    hintText: "Enter mobile number",
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: GestureDetector(
-                        onTap: () => _showCountryPicker(),
-                        child: Text(
-                          _selectedCountry == null ? "+91" : _selectedCountry!.callingCode,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Space(60),
+                Text("Hare Krishna 🙏🏻",
+                    style: TextStyle(
+                        fontSize: mainTitleTextSize,
+                        fontWeight: FontWeight.bold)),
+                Space(8),
+                Text("Please Login to your account",
+                    style: TextStyle(fontSize: 14, color: subTitle)),
+                Space(16),
+                Image.asset(gopuram,
+                    width: 200, height: 200, fit: BoxFit.cover),
+              ],
+            ),
+            Space(70),
+            Form(
+              key: _loginFormKey,
+              child: TextFormField(
+                onChanged: (value) {
+                  phonecontroller.text = value;
+                },
+                keyboardType: TextInputType.phone,
+                style: TextStyle(fontSize: 16),
+                inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                decoration: commonInputDecoration(
+                  hintText: "Enter mobile number",
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: GestureDetector(
+                      onTap: () => _showCountryPicker(),
+                      child: Text(
+                        _selectedCountry == null
+                            ? "+91"
+                            : _selectedCountry!.callingCode,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
                   ),
                 ),
               ),
-              Space(16),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16),
-                    textStyle: TextStyle(fontSize: 16),
-                    shape: StadiumBorder(),
-                    backgroundColor: true ? Colors.black : Colors.black,
-                  ),
-                  onPressed: () {
-                    if (_loginFormKey.currentState!.validate()) {
+            ),
+            Space(16),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(16),
+                  textStyle: TextStyle(fontSize: 16),
+                  shape: StadiumBorder(),
+                  backgroundColor: true ? Colors.orange : Colors.orange,
+                ),
+                onPressed: () async {
+                  await FirebaseAuth.instance.verifyPhoneNumber(
+                    phoneNumber:
+                        "${_selectedCountry!.callingCode} ${phonecontroller.text}",
+                    verificationCompleted: (PhoneAuthCredential credential) {},
+                    verificationFailed: (FirebaseAuthException e) {
+                      print (e.message);
+                    },
+                    codeSent: (String verificationId, int? resendToken) {
+                      LOTPVerificationScreen.verify=verificationId;
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LOTPVerificationScreen()),
-                      );
-                    }
-                  },
-                  child: Text("Log In", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
-                ),
-              ),
-              Space(32),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+    context,
+    MaterialPageRoute(builder: (context) => const LOTPVerificationScreen()),
+  );
+                    },
+                    codeAutoRetrievalTimeout: (String verificationId) {},
+                  );
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Don't have account?", style: TextStyle(fontSize: 16)),
-                    Space(4),
-                    Text('Sign Up', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  ],
-                ),
+                child: Text("Log In",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white)),
               ),
-         ]),
+            ),
+          ]),
         ),
       ),
     );
