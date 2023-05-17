@@ -97,7 +97,7 @@ class _JapathonState extends State<Japathon> {
                     padding: const EdgeInsets.only(
                         top: 20.0, left: 20.0, right: 20.0, bottom: 10.0),
                     child: Text(
-                      "Description",
+                      "About Japathon",
                       style: TextStyle(
                           fontFamily: "Sofia",
                           fontSize: 20.0,
@@ -109,7 +109,11 @@ class _JapathonState extends State<Japathon> {
                     padding: const EdgeInsets.only(
                         top: 0.0, left: 20.0, right: 20.0, bottom: 0.0),
                     child: Text(
-                      widget.description!,
+                      '''Are you tired of trying to control your min while chanting? Is chanting quality rounds one of your spiritual goals for this year? Are you looking forward to increse the number uof rounds you would like to chant?
+
+If you answered YES to any of the above questions, then you are right on the way to joining our 1008 crore rounds of Japa Marathon Sankalpa By Hare Krishna Movement Hyderabad.
+
+Japa Marathon is all about chanting the holy names of the divine, Shri Krishna. This chanting of Hare Krishna Mahamantra is like a genulne cry by a child for his mother. if chanting on beads is something new to you, dont worry, we will teach you how to chant on beads!, join the japa marathon and encourage your friends and family to participate in the marathon.''',
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                           fontFamily: "Sofia",

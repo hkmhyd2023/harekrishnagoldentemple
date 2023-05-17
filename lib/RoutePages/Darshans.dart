@@ -60,8 +60,9 @@ class _DarshansState extends State<Darshans> {
                   return const Text('No data found');
                 }
                 return ListView.builder(
-                  shrinkWrap: true,
                   reverse: true,
+                  shrinkWrap: true,
+                   physics: NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data!.size,
                   itemBuilder: (BuildContext context, int index) {
                     final DocumentSnapshot document =

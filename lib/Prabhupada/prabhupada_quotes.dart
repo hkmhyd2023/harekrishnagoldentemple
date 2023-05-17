@@ -46,6 +46,7 @@ class _PrabhupadaQuotesState extends State<PrabhupadaQuotes> {
                               }
                               return ListView.builder(
                                 shrinkWrap: true,
+                                reverse: true,
                                 itemCount: snapshot.data!.size,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
@@ -96,6 +97,7 @@ class _PrabhupadaQuotesState extends State<PrabhupadaQuotes> {
                                                     )),
                                               ],
                                             ),
+
                                             Padding(
                                               padding: EdgeInsets.only(
                                                   left: 16, right: 16),
@@ -129,10 +131,23 @@ class _PrabhupadaQuotesState extends State<PrabhupadaQuotes> {
     }
                                                     },
                                                   ),
+                                                  
                                                 ],
                                               ),
                                             ),
+                                            
                                           ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: Row(
+                                            
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text (""),
+                                                        Text(document['Date'], style: TextStyle(),)
+                                                      ],
+                                                    ),
                                         ),
                                         SizedBox(height: 20),
                                       ],

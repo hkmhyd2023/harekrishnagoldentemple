@@ -1166,7 +1166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black12.withOpacity(0.2),
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                  padding: const EdgeInsets.only(top: 120.0, left: 10.0),
                   child: Text(
                     "Sri Krishna Lila",
                     style: TextStyle(
@@ -1205,11 +1205,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 89.0,
                       width: _widht / 1.7,
                       decoration: BoxDecoration(
-                          color: Colors.black12.withOpacity(0.2),
+                          color: Colors.black12.withOpacity(0.4),
                           borderRadius:
                               BorderRadius.all(Radius.circular(10.0))),
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+                        padding: const EdgeInsets.only(top: 60.0, left: 15.0),
                         child: Text(
                           "Sri Chaitanya Lila",
                           style: TextStyle(
@@ -1239,18 +1239,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.blue,
                         image: DecorationImage(
                             image: NetworkImage(
-                                "https://iskcontirupati.info/wp-content/uploads/2021/02/Srila-Prabhupada.png"),
+                                "https://firebasestorage.googleapis.com/v0/b/hare-krishna-golden-temp-b1785.appspot.com/o/WhatsApp%20Image%202023-05-16%20at%202.06.09%20PM.jpeg?alt=media&token=7830f7a1-a74b-4153-98d1-1b92a9ff1a34"),
                             fit: BoxFit.cover),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     child: Container(
                       height: 89.0,
                       width: _widht / 1.7,
                       decoration: BoxDecoration(
-                          color: Colors.black12.withOpacity(0.2),
+                          color: Colors.black12.withOpacity(0.4),
                           borderRadius:
                               BorderRadius.all(Radius.circular(10.0))),
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+                        padding: const EdgeInsets.only(top: 65.0, left: 15.0),
                         child: Text(
                           "Srila Prabhupada Lila",
                           style: TextStyle(

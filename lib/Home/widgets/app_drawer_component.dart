@@ -87,7 +87,7 @@ class AppDrawerComponent extends StatelessWidget {
                         title: Text('Home', style: primaryTextStyle()),
                         onTap: () {
                           finish(context);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
                         },
                       ),
         

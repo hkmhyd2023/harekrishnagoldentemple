@@ -49,10 +49,11 @@ dependencies:
   get: ^4.6.5
   google_nav_bar: ^5.0.6
   image_picker: ^0.8.7+1
+  internet_connection_checker: ^1.0.0+1
   just_audio: ^0.9.32
   mailer: ^6.0.1
-  native_notify: ^0.0.3
   nb_utils: ^5.0.8
+  no_context_navigation: ^2.1.2
   pinput: ^2.2.31
   restart_app: ^1.1.2
   rxdart: ^0.27.7
@@ -92,6 +93,7 @@ flutter:
     - assets/silver-trophy.png
     - assets/bronze-trophy.png
     - assets/sugar.png
+    - assets/noInternet.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

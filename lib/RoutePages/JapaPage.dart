@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Japathon.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:intl/intl.dart';
@@ -128,7 +129,7 @@ class _JapaPageState extends State<JapaPage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var cardHight = (width - 32) * (9 / 16);
-    return Scaffold(
+      return Scaffold(
       backgroundColor: Colors.white,
 
       ///
@@ -219,169 +220,159 @@ class _JapaPageState extends State<JapaPage> {
                 ///
                 body: TabBarView(
                   children: [
-                    Align(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              child: Image.network(
-                                  "https://i.pinimg.com/736x/74/29/85/74298590b4704ad19896624b0a2ed81c.jpg"),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            TextField(
-                              controller: _rounds,
-                              style: primaryTextStyle(),
+                    Align(child: SingleChildScrollView(child: Padding(padding: EdgeInsets.all(8.0), child: Column(children: [
+                      ClipRRect(
+                            child: Image.network(
+                                "https://i.pinimg.com/736x/74/29/85/74298590b4704ad19896624b0a2ed81c.jpg"),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+TextField(
+                            controller: _rounds,
+                            style: primaryTextStyle(),
 
-                              decoration: InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(80)),
-                                enabledBorder: UnderlineInputBorder(
+                            decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
-                                ),
-                                labelText: 'No. Of Rounds',
-                                labelStyle: primaryTextStyle(size: 14),
-                                filled: true,
+                                  borderRadius: BorderRadius.circular(80)),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
                               ),
-                              // ignore: dead_code
-                              cursorColor: false ? white : blackColor,
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.done,
+                              labelText: 'No. Of Rounds',
+                              labelStyle: primaryTextStyle(size: 14),
+                              filled: true,
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                DateTime? pickeddate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime.now());
-                                if (pickeddate != null) {
-                                  setState(() {
-                                    _date.text = DateFormat('yyyy-MM-dd')
-                                        .format(pickeddate);
-                                  });
-                                }
-                              },
-                              child: TextField(
-                                controller: _date,
-                                style: primaryTextStyle(),
-                                decoration: InputDecoration(
-                                    focusedBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.white),
-                                        borderRadius:
-                                            BorderRadius.circular(80)),
-                                    enabledBorder: UnderlineInputBorder(
+                            // ignore: dead_code
+                            cursorColor: false ? white : blackColor,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              DateTime? pickeddate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime.now());
+                              if (pickeddate != null) {
+                                setState(() {
+                                  _date.text = DateFormat('yyyy-MM-dd')
+                                      .format(pickeddate);
+                                });
+                              }
+                            },
+                            child: TextField(
+                              controller: _date,
+                              style: primaryTextStyle(),
+                              decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.white),
-                                    ),
-                                    suffixIcon:
-                                        Icon(Icons.calendar_today_rounded),
-                                    labelText: 'Date',
-                                    labelStyle: primaryTextStyle(size: 14),
-                                    filled: true,
-                                    enabled: false),
-                                cursorColor: false ? white : blackColor,
-                                keyboardType: TextInputType.text,
-                                textInputAction: TextInputAction.done,
-                              ),
+                                      borderRadius:
+                                          BorderRadius.circular(80)),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.white),
+                                  ),
+                                  suffixIcon:
+                                      Icon(Icons.calendar_today_rounded),
+                                  labelText: 'Date',
+                                  labelStyle: primaryTextStyle(size: 14),
+                                  filled: true,
+                                  enabled: false),
+                              cursorColor: false ? white : blackColor,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.done,
                             ),
-                            Expanded(
-                              child: Align(
-                                alignment: FractionalOffset.bottomCenter,
-                                child: InkWell(
-                                  onTap: () async {
-                                    DateTime now = DateTime.now();
-                                    try {
-                                      await FirebaseFirestore.instance
-                                          .collection("Japa")
-                                          .doc(
-                                              '${FirebaseAuth.instance.currentUser!.uid}')
-                                          .update({
-                                        "NOR": FieldValue.increment(
-                                            _rounds.text.toInt()),
-                                        "Name":
-                                            "${FirebaseAuth.instance.currentUser!.displayName}",
-                                        "PURL":
-                                            "${FirebaseAuth.instance.currentUser!.photoURL}",
-                                        "Date": _date.text,
-                                        "LUD": DateFormat('yyyy-MM-dd')
-                                            .format(now),
-                                      });
+                          ),
+                          SizedBox(height: 180,),
+                          Align(
+                            alignment: FractionalOffset.bottomCenter,
+                            child: InkWell(
+                              onTap: () async {
+                                DateTime now = DateTime.now();
+                                try {
+                                  await FirebaseFirestore.instance
+                                      .collection("Japa")
+                                      .doc(
+                                          '${FirebaseAuth.instance.currentUser!.uid}')
+                                      .update({
+                                    "NOR": FieldValue.increment(
+                                        _rounds.text.toInt()),
+                                    "Name":
+                                        "${FirebaseAuth.instance.currentUser!.displayName}",
+                                    "PURL":
+                                        "${FirebaseAuth.instance.currentUser!.photoURL}",
+                                    "Date": _date.text,
+                                    "LUD": DateFormat('yyyy-MM-dd')
+                                        .format(now),
+                                  });
                       
-                                      _date.text = "";
-                                      _rounds.text = "";
-                                    } catch (e) {
-                                      await FirebaseFirestore.instance
-                                          .collection("Japa")
-                                          .doc(
-                                              '${FirebaseAuth.instance.currentUser!.uid}')
-                                          .set({
-                                        "NOR": FieldValue.increment(
-                                            _rounds.text.toInt()),
-                                        "Name":
-                                            "${FirebaseAuth.instance.currentUser!.displayName}",
-                                        "PURL":
-                                            "${FirebaseAuth.instance.currentUser!.photoURL}",
-                                        "Date": _date.text,
-                                        "LUD": DateFormat('yyyy-MM-dd')
-                                            .format(now),
-                                      });
-                                      _date.text = "";
-                                      _rounds.text = "";
-                                    }
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          CustomDialogExample(),
-                                    );
-                                  },
-                                  child: Container(
-                                    height: 55.0,
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.1,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0)),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Colors.orange,
-                                              Colors.deepOrange
-                                            ],
-                                            begin: const FractionalOffset(
-                                                0.0, 0.0),
-                                            end: const FractionalOffset(
-                                                1.0, 0.0),
-                                            stops: [0.0, 1.0],
-                                            tileMode: TileMode.clamp)),
-                                    child: Center(
-                                      child: Text(
-                                        "Update",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 19.0,
-                                            fontFamily: "Sofia",
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
+                                  _date.text = "";
+                                  _rounds.text = "";
+                                } catch (e) {
+                                  await FirebaseFirestore.instance
+                                      .collection("Japa")
+                                      .doc(
+                                          '${FirebaseAuth.instance.currentUser!.uid}')
+                                      .set({
+                                    "NOR": FieldValue.increment(
+                                        _rounds.text.toInt()),
+                                    "Name":
+                                        "${FirebaseAuth.instance.currentUser!.displayName}",
+                                    "PURL":
+                                        "${FirebaseAuth.instance.currentUser!.photoURL}",
+                                    "Date": _date.text,
+                                    "LUD": DateFormat('yyyy-MM-dd')
+                                        .format(now),
+                                  });
+                                  _date.text = "";
+                                  _rounds.text = "";
+                                }
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      CustomDialogExample(),
+                                );
+                              },
+                              child: Container(
+                                height: 55.0,
+                                width:
+                                    MediaQuery.of(context).size.width / 1.1,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(5.0)),
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Colors.orange,
+                                          Colors.deepOrange
+                                        ],
+                                        begin: const FractionalOffset(
+                                            0.0, 0.0),
+                                        end: const FractionalOffset(
+                                            1.0, 0.0),
+                                        stops: [0.0, 1.0],
+                                        tileMode: TileMode.clamp)),
+                                child: Center(
+                                  child: Text(
+                                    "Update",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 19.0,
+                                        fontFamily: "Sofia",
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
+
+                    ]),)),),
                     Align(
                         child: SingleChildScrollView(
                           child: Padding(
@@ -410,17 +401,16 @@ class _JapaPageState extends State<JapaPage> {
                         
                                 final data = snapshot.data!.data()
                                     as Map<String, dynamic>?;
-                                final lud = data?['LUD'] as String?;
-                                final NOR = data?['NOR'] as int;
+                                String? lud = "";
+                                int NOR;
                         
                                 String image = "";
                                 String card = "";
                                 Color color;
-                                if (lud == null) {
-                                  return Text('No Data');
-                                }
-                        
-                                if (NOR < 108) {
+                                try {
+                                  lud = data?['LUD'];
+                                  NOR = data?['NOR'];
+if (NOR < 108) {
                                   image = "assets/bronze.jpeg";
                                   card = "BRONZE";
                                   color = Colors.white;
@@ -433,6 +423,19 @@ class _JapaPageState extends State<JapaPage> {
                                   card = "PLATINUM";
                                   color = Colors.white;
                                 }
+                                } catch(e) {
+                                  lud = "Not Available";
+                                  NOR = 0;
+
+                                                                    image = "assets/bronze.jpeg";
+                                  card = "BRONZE";
+                                  color = Colors.white;
+                                }
+                                if (lud == null) {
+                                  return Text('No Data');
+                                }
+                        
+                                
                         
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
@@ -551,22 +554,31 @@ class _JapaPageState extends State<JapaPage> {
                         
                                 final data = snapshot.data!.data()
                                     as Map<String, dynamic>?;
-                                final lud = data?['LUD'] as String?;
-                                final NOR = data?['NOR'] as int;
+                                String? lud = "";
+                                int NOR = 0;
                         
                                 String level = "";
                                 if (lud == null) {
                                   return Text('No Data');
                                 }
                         
-                                if (NOR < 108) {
+                                
+                        try {
+                                  lud = data?['LUD'];
+                                  NOR = data?['NOR'];
+if (NOR < 108) {
                                   level = "Beginner";
                                 } else if (NOR < 1008) {
                                   level = "Intermidiate";
                                 } else {
                                   level = "Advanced";
                                 }
-                        
+                                } catch(e) {
+                                  lud = "Not Available";
+                                  NOR = 0;
+
+                                  level = "Beginner";
+                                }
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -727,7 +739,7 @@ class _JapaPageState extends State<JapaPage> {
                                                     .spaceBetween,
                                             children: <Widget>[
                                               Text(
-                                                data?['LUD'],
+                                                data?['LUD'] ?? "Not Available",
                                                 style: secondaryTextStyle(
                                                     color: Colors.black),
                                               ),
@@ -760,6 +772,7 @@ class _JapaPageState extends State<JapaPage> {
         ],
       ),
     );
+    
   }
 
   Widget _buildList() {
@@ -782,17 +795,20 @@ class _JapaPageState extends State<JapaPage> {
           itemCount: snapshot.data!.size,
           itemBuilder: (BuildContext context, int index) {
             final DocumentSnapshot document = snapshot.data!.docs[index];
-            String LevelBadge = "";
+            FaIcon LevelBadge = FaIcon(FontAwesomeIcons.trophy);
+            Color color = Colors.amber.shade600;
             if (index == 0) {
-              LevelBadge = "assets/gold-trophy.png";
+              LevelBadge = FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.amber.shade600,);
+              color = Colors.amber.shade600;
             }
             else if (index == 1) {
-              LevelBadge = "assets/silver-trophy.png";
-            }
+              LevelBadge = FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.grey.shade600,);
+              color = Colors.grey.shade600;            }
             else if (index == 2) {
-              LevelBadge = "assets/bronze-trophy.png";
-            } else {
-              LevelBadge = "assets/medal.png";
+              LevelBadge = FaIcon(FontAwesomeIcons.trophy, size: 40, color: Colors.brown.shade600,);
+              color = Colors.brown.shade600;            } else {
+                            LevelBadge = FaIcon(FontAwesomeIcons.medal, size: 50, color: Colors.amber.shade600,);
+              color = Colors.amber.shade600;
             };
             return Padding(
               padding:
@@ -843,11 +859,7 @@ class _JapaPageState extends State<JapaPage> {
                           ),
                         ],
                       ),
-                      Image.asset(
-                        LevelBadge,
-                        height: 50,
-                        width: 50,
-                      )
+                      LevelBadge
                     ],
                   ),
                   SizedBox(

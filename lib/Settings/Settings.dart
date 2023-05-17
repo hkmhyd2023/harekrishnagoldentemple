@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart';
+import 'package:harekrishnagoldentemple/Home/widgets/app_drawer_component.dart';
 import 'package:harekrishnagoldentemple/Settings/BecomeVolunteer.dart';
 import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
-import 'package:harekrishnagoldentemple/Settings/Playlist.dart';
 import 'package:harekrishnagoldentemple/faq_screen.dart';
 import 'package:harekrishnagoldentemple/main.dart';
 import 'package:image_picker/image_picker.dart';
@@ -240,7 +240,7 @@ TextStyle boldTextStyle({
               title: "My Playlist",
               titleTextStyle: boldTextStyle(),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyPlayList()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ComingSoonPage()));
               },
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: context.iconColor),
             ),

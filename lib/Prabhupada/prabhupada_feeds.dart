@@ -86,7 +86,7 @@ class _PrabhupadaFeedsState extends State<PrabhupadaFeeds> {
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                                                                              Text("There Are ${document["Likes"]} Likes"),
+                                                                                                              Text("${document["Likes"]} Likes"),
             
                                                      Row(
                                                           children: [

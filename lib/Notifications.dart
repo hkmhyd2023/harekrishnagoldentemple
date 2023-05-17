@@ -14,7 +14,7 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Notifications"), backgroundColor: Colors.white,),
+      appBar: AppBar(title: const Text("Notifications"), backgroundColor: Colors.white, automaticallyImplyLeading: true,),
       body: SingleChildScrollView(child: Column(
         children: [
           SizedBox(height: 30,),
@@ -29,7 +29,7 @@ class _NotificationsState extends State<Notifications> {
                         padding: const EdgeInsets.only(
                             left: 15.0, right: 15.0, top: 20.0),
                         child: Container(
-                          height: 250.0,
+                          height: 300.0,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.all(Radius.circular(80.0)),
@@ -91,38 +91,48 @@ class _NotificationsState extends State<Notifications> {
                     return ListView.builder(
                       shrinkWrap: true,
                       reverse: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: snapshot.data!.size,
                       itemBuilder: (BuildContext context, int index) {
                         final DocumentSnapshot document =
                             snapshot.data!.docs[index];
-                        return Container(
-                    padding: EdgeInsets.all(17),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: ListTile(
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                        Text(document['Title'], style: boldTextStyle()),
-                        SizedBox(height: 8),
-                        Text(document['Description'], style: secondaryTextStyle()),
-                        SizedBox(height: 8),
-                        ],
-                      ),
-                      leading: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(
-                        
-                        document['Icon'],
-                        
-                        ),
-                        
-                      ),
-                    ),
-                    );
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Container(
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(30),
+                                                ),
+                                                child: ListTile(
+                                                  title: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                              Text(document['Title'], style: boldTextStyle()),
+                              SizedBox(height: 8),
+                              Text(document['Description'], style: secondaryTextStyle()),
+                              SizedBox(height: 8),
+                              ],
+                                                  ),
+                                                  leading: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(
+                              
+                              document['Icon'],
+                              
+                              
+                              ),
+                              
+                                                  ),
+                                                ),
+                                                ),
+                            ),
+                            SizedBox(height: 20,)
+                          ],
+                        );
                       },
                     );
                   },

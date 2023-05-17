@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:harekrishnagoldentemple/Home/home.dart';
 import 'package:harekrishnagoldentemple/Music/music.dart';
 import 'package:harekrishnagoldentemple/RoutePages/JapaPage.dart';
-import 'package:harekrishnagoldentemple/Settings/Playlist.dart';
 import 'package:harekrishnagoldentemple/Settings/Settings.dart';
 import 'package:harekrishnagoldentemple/Stories/stories.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:harekrishnagoldentemple/krishna_lila/krishna_lila_entry.dart';
 
 class NaviBottomNavBar extends StatefulWidget {
   @override
@@ -26,7 +26,8 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
         return new Music();
       case 3:
         return new Settings();
-        break;
+      case 4:
+        return new KLEntry();
       default:
         return Settings();
     }
@@ -40,7 +41,9 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange.shade300,
-        onPressed: () {},
+        onPressed: () {setState(() {
+          currentIndex = 4;
+        });},
         child: Image.network("https://firebasestorage.googleapis.com/v0/b/hare-krishna-golden-temp-b1785.appspot.com/o/14-__flute_with_peacock_feather2-1-removebg-preview.png?alt=media&token=e0972325-95ec-4488-b0ae-eaf663f9f69c", height: 50, width: 50,),
       ),
       bottomNavigationBar: Theme(
