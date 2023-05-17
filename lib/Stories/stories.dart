@@ -43,7 +43,6 @@ class _StoriesState extends State<Stories> {
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  reverse: true,
                   itemCount: snapshot.data!.size,
                   itemBuilder: (BuildContext context, int index) {
                     final DocumentSnapshot document =

@@ -142,8 +142,18 @@ class _VMWSState extends State<VMWS> {
                               ),
                               SizedBox(
                                 height: 20,
-                              )
-
+                              ),
+Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: Row(
+                                            
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text (""),
+                                                        Text(document['Date'], style: TextStyle(),)
+                                                      ],
+                                                    ),
+                                        ),
                             ],
                           ),
                         ),

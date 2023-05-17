@@ -41,7 +41,6 @@ class _ABPState extends State<ABP> {
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  reverse: true,
                   itemCount: snapshot.data!.size,
                   itemBuilder: (BuildContext context, int index) {
                     final DocumentSnapshot document =
@@ -143,8 +142,19 @@ class _ABPState extends State<ABP> {
                               ),
                               SizedBox(
                                 height: 20,
-                              )
-
+                              ),
+Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: Row(
+                                            
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text (""),
+                                                        Text(document['Date'], style: TextStyle(),)
+                                                      ],
+                                                    ),
+                                        ),
+                                        SizedBox(height: 20,)
                             ],
                           ),
                         ),
