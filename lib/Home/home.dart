@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -214,8 +215,37 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              Image.network(imageUrl, height: 130)
-                                  .cornerRadiusWithClipRRect(16),
+                              CachedNetworkImage(
+                                
+                                imageUrl: imageUrl,
+  imageBuilder: (context, imageProvider) => Container(
+    width: 80.0,
+    height: 80.0,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8.0),
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover,),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    width:
+                                        80, // Adjust the width of the container according to your needs
+                                    height:
+                                        80, // Adjust the height of the container according to your needs
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                ),
+                                height: 130,
+                              ),
                               16.width,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Ekadasi Reminders",
+                    "Ekadashi Reminders",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   GestureDetector(
@@ -433,11 +463,34 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Container(
                               alignment: FractionalOffset.centerLeft,
-                              child: CircleAvatar(
-                                radius: 48,
-                                backgroundImage: NetworkImage(
-                                  document["Main-Image"],
+                              child: CachedNetworkImage(
+                                
+                                imageUrl: document['Main-Image'],
+  imageBuilder: (context, imageProvider) => Container(
+    width: 80.0,
+    height: 40.0,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(48),
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover,),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    width: 80,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(48.0),
+                                    ),
+                                  ),
                                 ),
+                                height: 80,
                               ),
                             )
                           ],
@@ -448,6 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -513,12 +567,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Image.network(
-                        imageUrl,
-                      ),
-                    ),
+                    child: CachedNetworkImage(
+                                
+                                imageUrl: imageUrl,
+  imageBuilder: (context, imageProvider) => Container(
+height: 270,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                ),
+                                height: 270,
+                              ),
                   ),
                 );
               },
@@ -733,10 +808,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Image.network(
-                        imageUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+height: 230,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              230, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
                       ),
                     ),
                   ),

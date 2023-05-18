@@ -27,14 +27,9 @@ void main() async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print("FCM Message Opened: ${message.notification?.title}");
 navService.pushNamed('/notifications');  });
-bool result = await InternetConnectionChecker().hasConnection;
 
-  if (result == false) {
-    runApp(MaterialApp(home: const NoInternet(), debugShowCheckedModeBanner: false,));
-  } else {
     runApp(const MyApp());
   }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

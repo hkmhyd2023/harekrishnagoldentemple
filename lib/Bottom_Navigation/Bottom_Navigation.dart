@@ -44,7 +44,7 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
         onPressed: () {setState(() {
           currentIndex = 4;
         });},
-        child: Image.network("https://firebasestorage.googleapis.com/v0/b/hare-krishna-golden-temp-b1785.appspot.com/o/14-__flute_with_peacock_feather2-1-removebg-preview.png?alt=media&token=e0972325-95ec-4488-b0ae-eaf663f9f69c", height: 50, width: 50,),
+        child: Image.asset("assets/flute.png", height: 50, width: 50,),
       ),
       bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
@@ -71,7 +71,7 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
                           currentIndex = 1;
                         });
                       },
-                      icon: Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Om_symbol.svg/1200px-Om_symbol.svg.png", color: Colors.black, height: 23, width: 23,),
+                      icon: Image.asset("assets/om.png", color: Colors.black, height: 23, width: 23,),
                   ),
                 
                   IconButton(
@@ -80,7 +80,7 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
                           currentIndex = 2;
                         });
                       },
-                      icon: Image.network("https://cdn-icons-png.flaticon.com/512/4430/4430494.png", color: Colors.black, height: 23, width: 23,),
+                      icon: Image.asset("assets/bottom_music.png", color: Colors.black, height: 23, width: 23,),
                   ),
 
                   IconButton(

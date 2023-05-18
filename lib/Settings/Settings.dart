@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:harekrishnagoldentemple/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SettingItemWidget extends StatelessWidget {
   final String title;
@@ -176,7 +178,35 @@ TextStyle boldTextStyle({
             SizedBox(height: 16),
             Stack(
               children: [
-                Image.network(FirebaseAuth.instance.currentUser!.photoURL ?? "https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929__340.png", height: 100, width: 100, fit: BoxFit.cover).cornerRadiusWithClipRRect(60),
+                CachedNetworkImage(
+                                
+                                imageUrl: FirebaseAuth.instance.currentUser!.photoURL ?? "https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929__340.png",
+  imageBuilder: (context, imageProvider) => Container(
+    width: 100.0,
+    height: 100.0,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(60),
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover,),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(60.0),
+                                    ),
+                                  ),
+                                ),
+                                height: 100,
+                              ),
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -289,7 +319,7 @@ TextStyle boldTextStyle({
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.network('https://firebasestorage.googleapis.com/v0/b/hare-krishna-golden-temp-b1785.appspot.com/o/gopuram.png?alt=media&token=a06d5ce3-a872-4c11-a35a-1e854fc4c8af', color: Colors.orange, height: 40, width: 40,),
+                    Image.asset('assets/gopuram.png' , color: Colors.orange, height: 40, width: 40,),
                     8.height,
                     Text('HKM Hyderabad', style: boldTextStyle(size: 20)),
                     8.height,

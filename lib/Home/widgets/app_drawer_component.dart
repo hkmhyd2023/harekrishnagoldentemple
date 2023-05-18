@@ -101,7 +101,7 @@ class AppDrawerComponent extends StatelessWidget {
                         },
                       ),
                                           ListTile(
-                        leading: Image.network('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Aum_Om_black.svg/1200px-Aum_Om_black.svg.png', color: Colors.orange, height: 22, width: 22,),
+                        leading: Image.asset('assets/om.png', color: Colors.orange, height: 22, width: 22,),
                         title: Text('Japa', style: primaryTextStyle()),
                         onTap: () {
                           finish(context);
@@ -154,7 +154,7 @@ class AppDrawerComponent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network('https://firebasestorage.googleapis.com/v0/b/hare-krishna-golden-temp-b1785.appspot.com/o/gopuram.png?alt=media&token=a06d5ce3-a872-4c11-a35a-1e854fc4c8af', color: Colors.orange, height: 40, width: 40,),
+                  Image.asset('assets/gopuram.png', color: Colors.orange, height: 40, width: 40,),
                   8.height,
                   Text('HKM Hyderabad', style: boldTextStyle(size: 20)),
                   8.height,

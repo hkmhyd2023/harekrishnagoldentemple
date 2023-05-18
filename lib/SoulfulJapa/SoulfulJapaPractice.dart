@@ -41,7 +41,6 @@ class _SFJPState extends State<SFJP> {
                 }
                 return ListView.builder(
                   shrinkWrap: true,
-                  reverse: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data!.size,
                   itemBuilder: (BuildContext context, int index) {

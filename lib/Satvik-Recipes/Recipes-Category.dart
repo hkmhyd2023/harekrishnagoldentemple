@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:harekrishnagoldentemple/Satvik-Recipes/Recipes-Category-Detail.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RCategories extends StatefulWidget {
   const RCategories({super.key});
@@ -45,14 +47,35 @@ class _RCategoriesState extends State<RCategories> {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => RCDetail(category: document['Title'],)));
             },
             child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(document['Image'])
-                ),
+              children: [CachedNetworkImage(
+                                
+                                imageUrl: document['Image'],
+  imageBuilder: (context, imageProvider) => Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
               
                 Positioned(
-                  bottom: 16,
+                  bottom: 180,
                   left: 16,
                   child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

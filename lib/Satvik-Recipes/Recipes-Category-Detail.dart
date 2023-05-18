@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:harekrishnagoldentemple/Satvik-Recipes/Recipes-Detail.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RCDetail extends StatefulWidget {
   final String category;
@@ -47,10 +49,32 @@ class _RCDetailState extends State<RCDetail> {
             },
             child: Stack(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(document['Image'])
-                ),
+                CachedNetworkImage(
+                                
+                                imageUrl: document['Image'],
+  imageBuilder: (context, imageProvider) => Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
               
                 Positioned(
                   bottom: 16,

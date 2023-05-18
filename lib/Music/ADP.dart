@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:harekrishnagoldentemple/Music/Song.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ADP extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
@@ -63,10 +64,68 @@ class _ADPState extends State<ADP> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                 }
                 if (!snapshot.hasData) {
-                  return const Text('No data found');
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                 }
                 return ListView.builder(
                   shrinkWrap: true,

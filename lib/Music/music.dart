@@ -1,8 +1,14 @@
+// ignore_for_file: unrelated_type_equality_checks
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:harekrishnagoldentemple/Music/ADP.dart';
 import 'package:harekrishnagoldentemple/Music/Song.dart';
+import 'package:harekrishnagoldentemple/NoInternet.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Music extends StatefulWidget {
   const Music({super.key});
@@ -14,6 +20,7 @@ class Music extends StatefulWidget {
 class _MusicState extends State<Music> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Music"),
@@ -50,10 +57,68 @@ class _MusicState extends State<Music> {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
               }
               if (!snapshot.hasData) {
-                return const Text('No data found');
+                return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
               }
               return Container(
                 height: 320,
@@ -73,6 +138,7 @@ class _MusicState extends State<Music> {
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
+                              
                               Container(
                                 height: 300,
                                 width: MediaQuery.of(context).size.width * 0.55,
@@ -190,15 +256,36 @@ class _MusicState extends State<Music> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(color: Colors.grey.shade200.withOpacity(0.6), borderRadius: BorderRadius.circular(15.0)),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Image.network(
-                              document['Image'],
-                              height: 50,
-                              width: 50,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                          CachedNetworkImage(
+                                
+                                imageUrl: document['Image'],
+  imageBuilder: (context, imageProvider) => Container(
+height: 50,
+width: 50,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                  ),
+                                ),
+                                height: 50,
+                                width: 50,
+                                
+                              ),
                           SizedBox(width: 20,),
                           Expanded(
                             child: Column(
@@ -238,4 +325,5 @@ class _MusicState extends State<Music> {
       )),
     );
   }
-}
+    }
+

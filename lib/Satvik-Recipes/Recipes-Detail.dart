@@ -1,6 +1,8 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RDetail extends StatefulWidget {
   final DocumentSnapshot document;
@@ -29,7 +31,35 @@ class _RDetailState extends State<RDetail> {
               borderRadius: BorderRadius.circular(25),
               child: Stack(
                 children: [
-                  Image.network(widget.document['Image'], width: MediaQuery.of(context).size.width, height: 250, fit: BoxFit.cover),
+                  CachedNetworkImage(
+                                
+                                imageUrl: widget.document['Image'],
+  imageBuilder: (context, imageProvider) => Container(
+height: 250,
+width: MediaQuery.of(context).size.width,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                ),
+                                height: 300,
+                                width: MediaQuery.of(context).size.width,
+                              ),
                   Positioned(
                     bottom: 16,
                     left: 16,
@@ -146,12 +176,22 @@ Column(children: [
                         children: [
                           Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Image.network(
-                              document['Image'],
-                              height: 80,
-                              width: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
-                            ),
+                            child: CachedNetworkImage(
+                                
+                                imageUrl: document['Image'],
+  imageBuilder: (context, imageProvider) => Container(
+    height: 80.0,
+    width: MediaQuery.of(context).size.width,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover,),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Image.asset("assets/loading-gif.gif", height: 80, width: MediaQuery.of(context).size.width,),
+                              ),
                           ),
                           Align(
                             alignment: Alignment.center,
@@ -197,6 +237,7 @@ Column(children: [
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: snapshot.data!.size,
+                  physics:const  NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     final DocumentSnapshot document =
                         snapshot.data!.docs[index];

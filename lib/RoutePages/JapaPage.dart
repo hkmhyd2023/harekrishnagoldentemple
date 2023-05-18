@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, sort_child_properties_last, unnecessary_new, prefer_const_constructors, depend_on_referenced_packages
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Japathon.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CustomDialogExample extends StatelessWidget {
   @override
@@ -221,11 +223,35 @@ class _JapaPageState extends State<JapaPage> {
                 body: TabBarView(
                   children: [
                     Align(child: SingleChildScrollView(child: Padding(padding: EdgeInsets.all(8.0), child: Column(children: [
-                      ClipRRect(
-                            child: Image.network(
-                                "https://i.pinimg.com/736x/74/29/85/74298590b4704ad19896624b0a2ed81c.jpg"),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                      CachedNetworkImage(
+                                
+                                imageUrl: "https://i.pinimg.com/736x/74/29/85/74298590b4704ad19896624b0a2ed81c.jpg",
+  imageBuilder: (context, imageProvider) => Container(
+    height: 300,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      
+      image: DecorationImage(
+        
+        image: imageProvider, fit: BoxFit.cover, ),
+    ),
+  ),
+                                
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                      
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: Container(
+                                    height: 300,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
                           SizedBox(
                             height: 20,
                           ),
@@ -395,8 +421,36 @@ TextField(
                               builder: (BuildContext context,
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                                 if (!snapshot.hasData) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
+                                  return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                                 }
                         
                                 final data = snapshot.data!.data()
@@ -548,8 +602,36 @@ if (NOR < 108) {
                               builder: (BuildContext context,
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
                                 if (!snapshot.hasData) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
+                                  return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                                 }
                         
                                 final data = snapshot.data!.data()
@@ -680,7 +762,7 @@ if (NOR < 108) {
                                           ),
                                           Align(
                                             alignment: Alignment.bottomRight,
-                                            child: Image.network('https://www.pngmart.com/files/8/Yoga-Pose-PNG-Transparent-Images.png', height: 55, width: 55, color: Colors.white,),
+                                            child: Image.asset('assets/yoga.png', height: 55, width: 55, color: Colors.white,),
                                           )
                                         ],
                                       ),

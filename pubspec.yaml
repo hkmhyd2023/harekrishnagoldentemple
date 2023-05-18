@@ -33,6 +33,7 @@ dependencies:
   cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.6.0
+  connectivity: ^3.0.6
   country_calling_code_picker: ^2.0.1
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.5.0
@@ -94,6 +95,11 @@ flutter:
     - assets/bronze-trophy.png
     - assets/sugar.png
     - assets/noInternet.png
+    - assets/flute.png
+    - assets/om.png
+    - assets/bottom_music.png
+    - assets/loading-gif.gif
+    
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -153,7 +153,7 @@ class _ChaitanyaMahaPrabhuFeedsState extends State<ChaitanyaMahaPrabhuFeeds> {
                                                     child: Text("Ref: ${document["Reference"]}", style: TextStyle(fontStyle: FontStyle.italic),),
                                                   ),
             
-SizedBox(height: 5,),
+SizedBox(height:10,),
                                                   Padding(
                                           padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
                                           child: Row(
@@ -166,6 +166,7 @@ SizedBox(height: 5,),
                                                       ],
                                                     ),
                                         ),
+                                        SizedBox(height: 10,)
                                                 ],
                                               ),
                                             ),

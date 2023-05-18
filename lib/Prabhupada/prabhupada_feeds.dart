@@ -152,7 +152,19 @@ class _PrabhupadaFeedsState extends State<PrabhupadaFeeds> {
                                                     child: Text("Ref: ${document["Reference"]}", style: TextStyle(fontStyle: FontStyle.italic),),
                                                   ),
             
-                                                  SizedBox(height: 20,)
+                                                  SizedBox(height: 10,),
+                                                   Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: Row(
+                                            
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text (""),
+                                                        Text(document['Date'], style: TextStyle(),)
+                                                      ],
+                                                    ),
+                                        ),
+                                        SizedBox(height: 10,)
                                                 ],
                                               ),
                                             ),
