@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:harekrishnagoldentemple/Music/Song.dart';
+import 'package:harekrishnagoldentemple/NoInternet.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,9 +22,56 @@ class ADP extends StatefulWidget {
 class _ADPState extends State<ADP> {
   bool isPlay = true;
 
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult connectivityResult;
+    try {
+      connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.wifi) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.none) {
+        setState(() {});
+      }
+    } on PlatformException catch (e) {
+      log('Couldn\'t check connectivity status', );
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(connectivityResult);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return _connectionStatus==ConnectivityResult.none ? NoInternet() : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(widget.documentSnapshot['Title']),

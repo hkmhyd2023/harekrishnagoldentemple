@@ -1,10 +1,14 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, sort_child_properties_last, unnecessary_new, prefer_const_constructors, depend_on_referenced_packages
 
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:harekrishnagoldentemple/NoInternet.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Japathon.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:intl/intl.dart';
@@ -83,6 +87,53 @@ class JapaPage extends StatefulWidget {
 }
 
 class _JapaPageState extends State<JapaPage> {
+
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult connectivityResult;
+    try {
+      connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.wifi) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.none) {
+        setState(() {});
+      }
+    } on PlatformException catch (e) {
+      log('Couldn\'t check connectivity status');
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(connectivityResult);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
   TextEditingController _date = TextEditingController();
   TextEditingController _rounds = TextEditingController();
   List<DocumentSnapshot> _data = [];
@@ -131,7 +182,7 @@ class _JapaPageState extends State<JapaPage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var cardHight = (width - 32) * (9 / 16);
-      return Scaffold(
+      return _connectionStatus==ConnectivityResult.none? NoInternet() : Scaffold(
       backgroundColor: Colors.white,
 
       ///
@@ -326,14 +377,14 @@ TextField(
                                   await FirebaseFirestore.instance
                                       .collection("Japa")
                                       .doc(
-                                          '${FirebaseAuth.instance.currentUser!.uid}')
+                                          '${FirebaseAuth.instance.currentUser?.uid}')
                                       .update({
                                     "NOR": FieldValue.increment(
                                         _rounds.text.toInt()),
                                     "Name":
-                                        "${FirebaseAuth.instance.currentUser!.displayName}",
+                                        "${FirebaseAuth.instance.currentUser?.displayName}",
                                     "PURL":
-                                        "${FirebaseAuth.instance.currentUser!.photoURL}",
+                                        "${FirebaseAuth.instance.currentUser?.photoURL}",
                                     "Date": _date.text,
                                     "LUD": DateFormat('yyyy-MM-dd')
                                         .format(now),
@@ -345,14 +396,14 @@ TextField(
                                   await FirebaseFirestore.instance
                                       .collection("Japa")
                                       .doc(
-                                          '${FirebaseAuth.instance.currentUser!.uid}')
+                                          '${FirebaseAuth.instance.currentUser?.uid}')
                                       .set({
                                     "NOR": FieldValue.increment(
                                         _rounds.text.toInt()),
                                     "Name":
-                                        "${FirebaseAuth.instance.currentUser!.displayName}",
+                                        "${FirebaseAuth.instance.currentUser?.displayName}",
                                     "PURL":
-                                        "${FirebaseAuth.instance.currentUser!.photoURL}",
+                                        "${FirebaseAuth.instance.currentUser?.photoURL}",
                                     "Date": _date.text,
                                     "LUD": DateFormat('yyyy-MM-dd')
                                         .format(now),
@@ -416,7 +467,7 @@ TextField(
                               stream: FirebaseFirestore.instance
                                   .collection('Japa')
                                   .doc(
-                                      '${FirebaseAuth.instance.currentUser!.uid}')
+                                      '${FirebaseAuth.instance.currentUser?.uid}')
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -543,7 +594,7 @@ if (NOR < 108) {
                                                             .withOpacity(0.7),
                                                         fontSize: 16.0),
                                                     text(
-                                                        "${FirebaseAuth.instance.currentUser!.displayName}".toUpperCase(),
+                                                        "${FirebaseAuth.instance.currentUser?.displayName}".toUpperCase(),
                                                         textColor: color,
                                                         fontSize: 16.0,
                                                         fontFamily: 'Medium'),
@@ -597,7 +648,7 @@ if (NOR < 108) {
                               stream: FirebaseFirestore.instance
                                   .collection('Japa')
                                   .doc(
-                                      '${FirebaseAuth.instance.currentUser!.uid}')
+                                      '${FirebaseAuth.instance.currentUser?.uid}')
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -690,7 +741,7 @@ if (NOR < 108) {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                  '${FirebaseAuth.instance.currentUser!.displayName}'.toUpperCase(),
+                                                  '${FirebaseAuth.instance.currentUser?.displayName}'.toUpperCase(),
                                                   style: boldTextStyle(size: 20)),
                                               8.height,
                                               Text('Last Update $lud',
@@ -772,7 +823,7 @@ if (NOR < 108) {
                                 StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('Japa')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .doc(FirebaseAuth.instance.currentUser?.uid)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {

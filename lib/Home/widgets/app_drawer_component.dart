@@ -69,12 +69,12 @@ class AppDrawerComponent extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CircleAvatar(backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL ?? "https://images.pexels.com/photos/274973/pexels-photo-274973.jpeg?cs=srgb&dl=pexels-pixabay-274973.jpg&fm=jpg"), radius: 50),
+                              CircleAvatar(backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser?.photoURL ?? "https://images.pexels.com/photos/274973/pexels-photo-274973.jpeg?cs=srgb&dl=pexels-pixabay-274973.jpg&fm=jpg"), radius: 50),
                               SizedBox(height: 30),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('${FirebaseAuth.instance.currentUser!.displayName}', style: boldTextStyle(size: 22)),
+                                  Text('${FirebaseAuth.instance.currentUser?.displayName}', style: boldTextStyle(size: 22)),
                                   Icon(Icons.arrow_forward_ios, size: 22),
                                 ],
                               ),

@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:harekrishnagoldentemple/NoInternet.dart';
 import 'package:harekrishnagoldentemple/SoulfulJapa/SoulfulJapaCC.dart';
 import 'package:harekrishnagoldentemple/SoulfulJapa/SoulfulJapaPractice.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -11,9 +15,56 @@ class SFJE extends StatefulWidget {
 }
 
 class _SFJEState extends State<SFJE> {
+
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult connectivityResult;
+    try {
+      connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.wifi) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.none) {
+        setState(() {});
+      }
+    } on PlatformException catch (e) {
+      log('Couldn\'t check connectivity status',);
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(connectivityResult);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _connectionStatus==ConnectivityResult.none ? NoInternet() : Scaffold(
       appBar: AppBar(title: Text("Soulful Japa"), backgroundColor: Colors.white,),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

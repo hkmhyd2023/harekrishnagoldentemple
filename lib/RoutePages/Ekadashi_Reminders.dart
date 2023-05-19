@@ -1,5 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:harekrishnagoldentemple/NoInternet.dart';
 
 class Ekadashi_Reminders extends StatefulWidget {
   Ekadashi_Reminders({Key? key}) : super(key: key);
@@ -9,9 +15,56 @@ class Ekadashi_Reminders extends StatefulWidget {
 }
 
 class _Ekadashi_RemindersState extends State<Ekadashi_Reminders> {
+
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult connectivityResult;
+    try {
+      connectivityResult = await _connectivity.checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.wifi) {
+        setState(() {});
+      } else if (connectivityResult == ConnectivityResult.none) {
+        setState(() {});
+      }
+    } on PlatformException catch (e) {
+      log('Couldn\'t check connectivity status', error: e);
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(connectivityResult);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _connectionStatus==ConnectivityResult.none ? NoInternet() : Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 9,

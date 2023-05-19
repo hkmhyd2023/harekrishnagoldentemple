@@ -72,9 +72,7 @@ class SettingItemWidget extends StatelessWidget {
             children: [
               Text(
                 title.validate(),
-                style: titleTextStyle ??
-                    boldTextStyle(
-                        color: titleTextColor ?? textPrimaryColorGlobal),
+                style: titleTextStyle ?? boldTextStyle(color: titleTextColor ?? textPrimaryColorGlobal),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -104,14 +102,12 @@ class SettingItemWidget extends StatelessWidget {
   }
 }
 
-
 class Settings extends StatefulWidget {
   const Settings({super.key});
 
   @override
   State<Settings> createState() => _SettingsState();
 }
-
 
 class _SettingsState extends State<Settings> {
   @override
@@ -129,40 +125,41 @@ class _SettingsState extends State<Settings> {
     if (mounted) super.setState(fn);
   }
 
-TextStyle boldTextStyle({
-  int? size,
-  Color? color,
-  FontWeight? weight,
-  String? fontFamily,
-  double? letterSpacing,
-  FontStyle? fontStyle,
-  double? wordSpacing,
-  TextDecoration? decoration,
-  TextDecorationStyle? textDecorationStyle,
-  TextBaseline? textBaseline,
-  Color? decorationColor,
-  Color? backgroundColor,
-  double? height,
-}) {
-  return TextStyle(
-    fontSize: size != null ? size.toDouble() : 16,
-    color: color ?? Colors.black,
-    fontWeight: weight ?? FontWeight.w500,
-    letterSpacing: letterSpacing,
-    fontStyle: fontStyle,
-    decoration: decoration,
-    decorationStyle: textDecorationStyle,
-    decorationColor: decorationColor,
-    wordSpacing: wordSpacing,
-    textBaseline: textBaseline,
-    backgroundColor: backgroundColor,
-    height: height,
-  );
-}
+  TextStyle boldTextStyle({
+    int? size,
+    Color? color,
+    FontWeight? weight,
+    String? fontFamily,
+    double? letterSpacing,
+    FontStyle? fontStyle,
+    double? wordSpacing,
+    TextDecoration? decoration,
+    TextDecorationStyle? textDecorationStyle,
+    TextBaseline? textBaseline,
+    Color? decorationColor,
+    Color? backgroundColor,
+    double? height,
+  }) {
+    return TextStyle(
+      fontSize: size != null ? size.toDouble() : 16,
+      color: color ?? Colors.black,
+      fontWeight: weight ?? FontWeight.w500,
+      letterSpacing: letterSpacing,
+      fontStyle: fontStyle,
+      decoration: decoration,
+      decorationStyle: textDecorationStyle,
+      decorationColor: decorationColor,
+      wordSpacing: wordSpacing,
+      textBaseline: textBaseline,
+      backgroundColor: backgroundColor,
+      height: height,
+    );
+  }
 
   final picker = ImagePicker();
   File? _imageFile;
   bool _isUploading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,34 +176,32 @@ TextStyle boldTextStyle({
             Stack(
               children: [
                 CachedNetworkImage(
-                                
-                                imageUrl: FirebaseAuth.instance.currentUser!.photoURL ?? "https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929__340.png",
-  imageBuilder: (context, imageProvider) => Container(
-    width: 100.0,
-    height: 100.0,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(60),
-      image: DecorationImage(
-        
-        image: imageProvider, fit: BoxFit.cover,),
-    ),
-  ),
-                                
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(60.0),
-                                    ),
-                                  ),
-                                ),
-                                height: 100,
-                              ),
+                  imageUrl: FirebaseAuth.instance.currentUser?.photoURL ?? "https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929__340.png",
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: 100.0,
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(60),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(60.0),
+                      ),
+                    ),
+                  ),
+                  height: 100,
+                ),
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -218,31 +213,34 @@ TextStyle boldTextStyle({
                       border: Border.all(color: Colors.black.withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: GestureDetector(child: Icon(Icons.edit, color: Colors.white, size: 16), onTap: () async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+                    child: GestureDetector(
+                      child: Icon(Icons.edit, color: Colors.white, size: 16),
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      File image = File(pickedFile.path);
+                        if (pickedFile != null) {
+                          File image = File(pickedFile.path);
 
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference reference = FirebaseStorage.instance.ref().child('ProfileImages').child(fileName);
+                          String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+                          Reference reference = FirebaseStorage.instance.ref().child('ProfileImages').child(fileName);
 
-      await reference.putFile(image);
-      String downloadURL = await reference.getDownloadURL();
-      FirebaseAuth.instance.currentUser!.updatePhotoURL(downloadURL);
-      print('Download URL: $downloadURL');
-    }
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
-                    },),
+                          await reference.putFile(image);
+                          String downloadURL = await reference.getDownloadURL();
+                          FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadURL);
+                          print('Download URL: $downloadURL');
+                        }
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
+                      },
+                    ),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 16),
-            Text(FirebaseAuth.instance.currentUser!.displayName ?? "Name", style: boldTextStyle(size: 18)),
+            Text(FirebaseAuth.instance.currentUser?.displayName ?? "Name", style: boldTextStyle(size: 18)),
             SizedBox(height: 8),
-            Text(FirebaseAuth.instance.currentUser!.phoneNumber ?? "Phone Number"),
+            Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? "Phone Number"),
             SizedBox(height: 16),
             Divider(height: 0),
             SizedBox(height: 16),
@@ -251,11 +249,10 @@ TextStyle boldTextStyle({
               title: "Edit Profile",
               titleTextStyle: boldTextStyle(),
               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfile()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfile()));
               },
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: context.iconColor),
             ),
-            
             SettingItemWidget(
               leading: Icon(Icons.question_answer, color: context.iconColor),
               title: "Faqs",
@@ -283,7 +280,6 @@ TextStyle boldTextStyle({
               },
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: context.iconColor),
             ),
-
             SettingItemWidget(
               leading: Icon(Icons.logout, color: context.iconColor),
               title: "Logout",
@@ -291,76 +287,84 @@ TextStyle boldTextStyle({
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
                 Navigator.of(context).push(MaterialPageRoute(builder: ((context) => MyApp())));
-
               },
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: context.iconColor),
             ),
-            SizedBox(height: 0,),
-
+            SizedBox(
+              height: 0,
+            ),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                height: 210,
-                width: context.width(),
-                child: Row(
-                        children: [
-                          Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    bottomLeft: Radius.circular(16),
-                  ),
-                  color: context.cardColor,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset('assets/gopuram.png' , color: Colors.orange, height: 40, width: 40,),
-                    8.height,
-                    Text('HKM Hyderabad', style: boldTextStyle(size: 20)),
-                    8.height,
-                    Text('Hare Krishna Golden Temple', style: TextStyle(fontSize: 12),),
-                    8.height,
-                    TextIcon(
-                      edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
-                      prefix: Icon(Icons.call, size: 14),
-                      text: "+91 04023326999",
-                      textStyle: primaryTextStyle(size: 14),
-                    ),
-                    TextIcon(
-                      edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
-                      prefix: Icon(Icons.web, size: 14),
-                      text: "www.hkmhyderabad.org",
-                      textStyle: primaryTextStyle(size: 14),
-                    ),
-                    TextIcon(
-                      edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
-                      prefix: Icon(Icons.location_on_outlined, size: 14),
-                      text: "Hyderabad, Telangana",
-                      textStyle: primaryTextStyle(size: 14),
-                    ),
-                  ],
-                ),
-                          ).expand(),
-                          Container(
-                width: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
-                  color: Colors.orange,
-                ),
-                          )
-                        ],
-                ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 210,
+                    width: context.width(),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              bottomLeft: Radius.circular(16),
+                            ),
+                            color: context.cardColor,
                           ),
-                    ],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                'assets/gopuram.png',
+                                color: Colors.orange,
+                                height: 40,
+                                width: 40,
+                              ),
+                              8.height,
+                              Text('HKM Hyderabad', style: boldTextStyle(size: 20)),
+                              8.height,
+                              Text(
+                                'Hare Krishna Golden Temple',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              8.height,
+                              TextIcon(
+                                edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
+                                prefix: Icon(Icons.call, size: 14),
+                                text: "+91 04023326999",
+                                textStyle: primaryTextStyle(size: 14),
+                              ),
+                              TextIcon(
+                                edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
+                                prefix: Icon(Icons.web, size: 14),
+                                text: "www.hkmhyderabad.org",
+                                textStyle: primaryTextStyle(size: 14),
+                              ),
+                              TextIcon(
+                                edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
+                                prefix: Icon(Icons.location_on_outlined, size: 14),
+                                text: "Hyderabad, Telangana",
+                                textStyle: primaryTextStyle(size: 14),
+                              ),
+                            ],
+                          ),
+                        ).expand(),
+                        Container(
+                          width: 70,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(16),
+                              bottomRight: Radius.circular(16),
+                            ),
+                            color: Colors.orange,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
+                ],
+              ),
             ),
           ],
         ),

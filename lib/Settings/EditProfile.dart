@@ -40,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+    FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).get().then((value) {
       setState(() {
         userNameController.text = value['Name'] ?? "";
       userDateOfBirthController.text = value['Date'] ?? "";
@@ -116,7 +116,7 @@ class _EditProfileState extends State<EditProfile> {
       _isUploading = false;
       _imageFile = null;
     });
-    FirebaseAuth.instance.currentUser!.updatePhotoURL(downloadUrl);
+    FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadUrl);
     print('Download URL: $downloadUrl');
   }
 
@@ -139,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
         _isUploading = false;
         _imageFile = null;
       });
-      FirebaseAuth.instance.currentUser!.updatePhotoURL(downloadUrl);
+      FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadUrl);
       print('Download URL: $downloadUrl');
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
       Restart.restartApp();
@@ -157,7 +157,7 @@ class _EditProfileState extends State<EditProfile> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    FirebaseAuth.instance.currentUser!.photoURL == null
+                    FirebaseAuth.instance.currentUser?.photoURL == null
                         ? CircleAvatar(
                             radius: 90,
                             backgroundColor: Colors.grey[300],
@@ -183,7 +183,7 @@ class _EditProfileState extends State<EditProfile> {
 
       await reference.putFile(image);
       String downloadURL = await reference.getDownloadURL();
-      FirebaseAuth.instance.currentUser!.updatePhotoURL(downloadURL);
+      FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadURL);
       print('Download URL: $downloadURL');
     }
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
@@ -191,7 +191,7 @@ class _EditProfileState extends State<EditProfile> {
                                 child: CircleAvatar(
                                   radius: 100,
                                   backgroundImage: NetworkImage(
-                                      '${FirebaseAuth.instance.currentUser!.photoURL}'),
+                                      '${FirebaseAuth.instance.currentUser?.photoURL}'),
                                 ),
                               ),
                               _isUploading
@@ -318,8 +318,8 @@ class _EditProfileState extends State<EditProfile> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ElevatedButton(onPressed: () {
                     try {
-                      FirebaseAuth.instance.currentUser!.updateDisplayName(userNameController.text);
-                      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).set({
+                      FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
+                      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
                         "Name": userNameController.text,
                         "Date": userDateOfBirthController.text,
                         "Email": userEmailController.text,
@@ -327,10 +327,10 @@ class _EditProfileState extends State<EditProfile> {
                       });
                     } catch (e) {
                       print ("E");
-                      FirebaseAuth.instance.currentUser!.updateEmail(userEmailController.text);
+                      FirebaseAuth.instance.currentUser?.updateEmail(userEmailController.text);
 
-                      FirebaseAuth.instance.currentUser!.updateDisplayName(userNameController.text);
-                      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).set({
+                      FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
+                      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
                         "Name": userNameController.text,
                         "Date": userDateOfBirthController.text,
                         "Email": userEmailController.text,
