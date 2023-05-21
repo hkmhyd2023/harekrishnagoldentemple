@@ -1,4 +1,5 @@
-import 'dart:math';
+
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -137,13 +138,10 @@ class _LOTPVerificationScreenState extends State<LOTPVerificationScreen> {
                           await FirebaseAuth.instance
                               .signInWithCredential(credential);
                           
-                          if (FirebaseAuth.instance.currentUser!.displayName == null) {
-                            FirebaseAuth.instance.currentUser!.updateDisplayName("Devotee${Random().nextInt(99)}${Random().nextInt(99)}${Random().nextInt(99)}${Random().nextInt(99)}");
-                          }
                           
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => NaviBottomNavBar()),
+                            MaterialPageRoute(builder: (context) => EditProfile()),
                             (route) => false,
                           );
                         } catch (e) {

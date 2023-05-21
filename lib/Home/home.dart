@@ -23,6 +23,7 @@ import 'package:harekrishnagoldentemple/Web_Series/web_series_entry.dart';
 import 'package:harekrishnagoldentemple/Yatra/Yatra_LIS.dart';
 import 'package:harekrishnagoldentemple/chaitanyaLilamrita/chaitanyaMahaprabhuEntry.dart.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../krishna_lila/krishna_lila_entry.dart';
@@ -65,6 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Notifications()),
+              );
+            },
+          ),
+          
+          IconButton(
+            icon: const Icon(Icons.share, size: 22, color: Colors.black),
+            onPressed: () async {
+              await Share.share(
+                "https://play.google.com/store/apps/details?id=org.hkmhyderabad.harekrishnagoldentemple"
               );
             },
           ),

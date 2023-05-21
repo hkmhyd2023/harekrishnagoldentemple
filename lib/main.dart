@@ -8,6 +8,7 @@ import 'package:harekrishnagoldentemple/Home/controller/carousel_controller.dart
 import 'package:harekrishnagoldentemple/Login/Login.dart';
 import 'package:harekrishnagoldentemple/NoInternet.dart';
 import 'package:harekrishnagoldentemple/Notifications.dart';
+import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:no_context_navigation/no_context_navigation.dart';
 
@@ -28,7 +29,7 @@ void main() async {
     print("FCM Message Opened: ${message.notification?.title}");
 navService.pushNamed('/notifications');  });
 
-    runApp(const MyApp());
+      runApp(const MyApp());
   }
 
 class MyApp extends StatelessWidget {

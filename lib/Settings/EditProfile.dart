@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart';
+import 'package:harekrishnagoldentemple/main.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,8 @@ class _EditProfileState extends State<EditProfile> {
   File? _imageFile;
   bool _isUploading = false;
   String dropdownValue = 'Male';
+  String preacherValue = 'Select Japa Coordinator';
+  String giftCenterValue = 'Select Gifts Center';
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController userNickNameController = TextEditingController();
@@ -33,7 +36,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController userEmailController = TextEditingController();
   TextEditingController userContactNumberController = TextEditingController();
   TextEditingController userGenderController = TextEditingController();
-
+  TextEditingController userDateOfAnniverserryController = TextEditingController();
   DateTime? selectedDate;
 
   @override
@@ -41,14 +44,23 @@ class _EditProfileState extends State<EditProfile> {
     // TODO: implement initState
     super.initState();
     FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).get().then((value) {
-      setState(() {
+      try {
+        setState(() {
         userNameController.text = value['Name'] ?? "";
       userDateOfBirthController.text = value['Date'] ?? "";
       userEmailController.text = value['Email'] ?? "";
       userGenderController.text = value['Gender'] ?? "Male";
+      userDateOfAnniverserryController.text = value['DOA'] ?? "";
       dropdownValue = value['Gender'] ?? "Male";
+      giftCenterValue = value['Gift-Center'] ?? "Select Gifts Center";
+      preacherValue = value['Preacher'] ?? "Select Japa Coordinator";
+
       });
+      } catch(e) {
+        print(e);
+      }
     });
+
   }
 
   String formatDate(String? dateTime,
@@ -66,7 +78,7 @@ class _EditProfileState extends State<EditProfile> {
     await showDatePicker(
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(1896),
       lastDate: DateTime(3000),
       builder: (_, child) {
         return Theme(
@@ -85,12 +97,36 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
+  void selectDateAndTime2(BuildContext context) async {
+    await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1896),
+      lastDate: DateTime(3000),
+      builder: (_, child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child!,
+        );
+      },
+    ).then((date) async {
+      if (date != null) {
+        selectedDate = date;
+        userDateOfAnniverserryController.text =
+            "${formatDate(selectedDate.toString(), format: 'd MMM, yyyy')}";
+      }
+    }).catchError((e) {
+      toast(e.toString());
+    });
+  }
+
   FocusNode f1 = FocusNode();
   FocusNode f2 = FocusNode();
   FocusNode f3 = FocusNode();
   FocusNode f4 = FocusNode();
   FocusNode f5 = FocusNode();
   FocusNode f6 = FocusNode();
+  FocusNode f7 = FocusNode();
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -250,7 +286,32 @@ class _EditProfileState extends State<EditProfile> {
                   
             ),
           ),
+            Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(10,2,10,2),
+              decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(20),
+                 border: Border.all(color: Colors.orange)
+              ),
+              child: TextField(
+                    controller: userDateOfAnniverserryController,
+                    focusNode: f7,
+                    readOnly: true,
+                    onTap: () {
+                      selectDateAndTime2(context);
+                    },
+                    decoration: inputDecoration(
+                      context,
+                      hintText: "Date Of Anniversary",
+                      suffixIcon: Icon(Icons.calendar_month_rounded,
+                          size: 16, color: false ? white : gray),
+                    ),
+                    
+                  ),
                   
+            ),
+          ),      
                   SizedBox(height: 20),
                   Padding(
             padding: const EdgeInsets.all(8.0),
@@ -311,31 +372,124 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,)
+                  SizedBox(height: 20,),
+                  StreamBuilder<QuerySnapshot>(stream: FirebaseFirestore.instance.collection('Gift-Centers').snapshots(), builder: (context, snapshot) {
+                      List<DropdownMenuItem<String>> giftCenterItems = [];
+
+                      if(!snapshot.hasData) {
+
+                      } else {
+                        final giftCenter = snapshot.data!.docs.toList();
+                        for (var center in giftCenter) {
+                          giftCenterItems.add(DropdownMenuItem<String>(value: center['Name'].toString(), child: Text(center['Name'].toString()),));
+                        }
+                      }
+                      return  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: boxDecorationWithRoundedCorners(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(20)),
+                        border: Border.all(color: Colors.orange),
+                        backgroundColor: false ? cardDarkColor : Color(0xFFF8F8F8),
+                      ),
+                      padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: DropdownButton<String>(
+                        value: giftCenterValue,
+                        elevation: 16,
+                        style: primaryTextStyle(),
+                        hint: Text('Select Gifts Center', style: primaryTextStyle()),
+                        isExpanded: true,
+                        underline: Container(
+                          height: 0,
+                          color: Colors.deepPurpleAccent,
+                        ),
+
+                        onChanged: (newValue) {
+                          setState(() {
+                            giftCenterValue = newValue.toString();
+                            print (giftCenterValue);
+                          });
+                        },
+                        items: giftCenterItems,
+                      ),
+                    ),
+                  );
+                  },),
+                  StreamBuilder<QuerySnapshot>(stream: FirebaseFirestore.instance.collection('Preachers').snapshots(), builder: (context, snapshot) {
+                      List<DropdownMenuItem<String>> preacherItems = [];
+
+                      if(!snapshot.hasData) {
+
+                      } else {
+                        final preachers = snapshot.data!.docs.toList();
+                        for (var preacher in preachers) {
+                          preacherItems.add(DropdownMenuItem<String>(value: preacher['Name'].toString(), child: Text(preacher['Name'].toString()),));
+                        }
+                      }
+                      return  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: boxDecorationWithRoundedCorners(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(20)),
+                        border: Border.all(color: Colors.orange),
+                        backgroundColor: false ? cardDarkColor : Color(0xFFF8F8F8),
+                      ),
+                      padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                      child: DropdownButton<String>(
+                        value: preacherValue,
+                        elevation: 16,
+                        style: primaryTextStyle(),
+                        hint: Text('Select Japa Coordinator', style: primaryTextStyle()),
+                        isExpanded: true,
+                        underline: Container(
+                          height: 0,
+                          color: Colors.deepPurpleAccent,
+                        ),
+
+                        onChanged: (newValue) {
+                          setState(() {
+                            preacherValue = newValue.toString();
+                          });
+                        },
+                        items: preacherItems,
+                      ),
+                    ),
+                  );
+                  },),
+                 
                 ]),
                 
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  child: ElevatedButton(onPressed: () {
+                  child: ElevatedButton(onPressed: () async {
                     try {
-                      FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
-                      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
+                      await FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
+                      await FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
                         "Name": userNameController.text,
                         "Date": userDateOfBirthController.text,
                         "Email": userEmailController.text,
                         "Gender": dropdownValue,
                       });
+
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
+
                     } catch (e) {
                       print ("E");
-                      FirebaseAuth.instance.currentUser?.updateEmail(userEmailController.text);
+                      await FirebaseAuth.instance.currentUser?.updateEmail(userEmailController.text);
 
-                      FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
-                      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
+                      await FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
+                      await FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
                         "Name": userNameController.text,
                         "Date": userDateOfBirthController.text,
                         "Email": userEmailController.text,
                         "Gender": dropdownValue,
+                        "DOA": userDateOfAnniverserryController,
+                        "Gift-Center": giftCenterValue,
+                        "Preacher": preacherValue
                       });
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  NaviBottomNavBar()));
                     }
                   }, child: Text("Update", style: TextStyle(color: Colors.white)),           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange 

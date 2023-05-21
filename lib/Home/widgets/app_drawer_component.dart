@@ -10,6 +10,7 @@ import 'package:harekrishnagoldentemple/RoutePages/JapaPage.dart';
 import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
 import 'package:harekrishnagoldentemple/faq_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ComingSoonPage extends StatelessWidget {
   @override
@@ -117,13 +118,21 @@ class AppDrawerComponent extends StatelessWidget {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => FaqScreen()));
                         },
                       ),
-        
                       ListTile(
                         leading: FaIcon(FontAwesomeIcons.donate, color: Colors.orange),
                         title: Text('Sevas', style: primaryTextStyle()),
                         onTap: () {
                           finish(context);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ComingSoonPage()));
+                        },
+                      ),
+                      ListTile(
+                        leading: FaIcon(FontAwesomeIcons.share, color: Colors.orange),
+                        title: Text('Share', style: primaryTextStyle()),
+                        onTap: () async {
+                                  await Share.share(
+                "https://play.google.com/store/apps/details?id=org.hkmhyderabad.harekrishnagoldentemple"
+              );
                         },
                       ),
                     ],

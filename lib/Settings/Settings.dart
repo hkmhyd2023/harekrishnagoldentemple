@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart';
 import 'package:harekrishnagoldentemple/Home/widgets/app_drawer_component.dart';
+import 'package:harekrishnagoldentemple/Login/Login.dart';
 import 'package:harekrishnagoldentemple/Settings/BecomeVolunteer.dart';
 import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
 import 'package:harekrishnagoldentemple/faq_screen.dart';
@@ -14,6 +16,88 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
 import 'package:shimmer/shimmer.dart';
+
+class CustomDialogExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: context.cardColor,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10.0,
+                offset: const Offset(0.0, 10.0)),
+          ],
+        ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text('Hare Krishna 🙏🏻',
+                      style: boldTextStyle(color: Colors.black, size: 22)),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    finish(context);
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(16),
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.close, color: Colors.black)),
+                ),
+              ],
+            ),
+            Image(
+                image: AssetImage('assets/widgettrophy.png'),
+                height: 120,
+                width: 190,
+                fit: BoxFit.cover),
+            24.height,
+            Text('Hare Krishna 🙏🏻',
+                style: boldTextStyle(color: Colors.black, size: 24)),
+            16.height,
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Text("We really miss you a lot, do you still want to leave us",
+                  style: secondaryTextStyle(color: Colors.black)),
+            ),
+            30.height,
+            Row(
+              children: [
+                ElevatedButton(onPressed: () async {
+FirebaseFirestore.instance.collection("Japa").doc('${FirebaseAuth.instance.currentUser?.uid}').delete();
+                
+                finish(context);
+                }, child: Text("CANCEL")),
+                ElevatedButton(onPressed: () async {
+FirebaseFirestore.instance.collection("Japa").doc('${FirebaseAuth.instance.currentUser?.uid}').delete();
+                
+                FirebaseFirestore.instance.collection("Users").doc('${FirebaseAuth.instance.currentUser?.uid}').delete();
+                await FirebaseAuth.instance.currentUser!.delete();
+                Navigator.of(context).push(MaterialPageRoute(builder: ((context) => LogIn())));
+                }, child: Text("DELETE"))
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class SettingItemWidget extends StatelessWidget {
   final String title;
@@ -286,7 +370,17 @@ class _SettingsState extends State<Settings> {
               titleTextStyle: boldTextStyle(),
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
-                Navigator.of(context).push(MaterialPageRoute(builder: ((context) => MyApp())));
+                Navigator.of(context).push(MaterialPageRoute(builder: ((context) => LogIn())));
+              },
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: context.iconColor),
+            ),
+            SettingItemWidget(
+              leading: Icon(Icons.logout, color: context.iconColor),
+              title: "Delete Account",
+              titleTextStyle: boldTextStyle(),
+              onTap: () async {
+                
+                showDialog(context: context, builder: (BuildContext context) => CustomDialogExample());
               },
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: context.iconColor),
             ),
