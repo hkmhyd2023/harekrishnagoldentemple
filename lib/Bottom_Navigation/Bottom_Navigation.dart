@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:harekrishnagoldentemple/Home/home.dart';
@@ -74,7 +75,11 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
       case 0:
         return HomeScreen();
       case 1:
-        return JapaPage();
+        if (FirebaseAuth.instance.currentUser != null) {
+          return JapaPage();
+        } else {
+          return CustomDialogExample3();
+        }
       case 2:
         return Music();
       case 3:

@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart';
+import 'package:harekrishnagoldentemple/Home/home.dart';
 import 'package:harekrishnagoldentemple/main.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -13,6 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:shimmer/shimmer.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -36,31 +39,34 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController userEmailController = TextEditingController();
   TextEditingController userContactNumberController = TextEditingController();
   TextEditingController userGenderController = TextEditingController();
-  TextEditingController userDateOfAnniverserryController = TextEditingController();
+  TextEditingController userDateOfAnniverserryController =
+      TextEditingController();
   DateTime? selectedDate;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).get().then((value) {
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((value) {
       try {
         setState(() {
-        userNameController.text = value['Name'] ?? "";
-      userDateOfBirthController.text = value['Date'] ?? "";
-      userEmailController.text = value['Email'] ?? "";
-      userGenderController.text = value['Gender'] ?? "Male";
-      userDateOfAnniverserryController.text = value['DOA'] ?? "";
-      dropdownValue = value['Gender'] ?? "Male";
-      giftCenterValue = value['Gift-Center'] ?? "Select Gifts Center";
-      preacherValue = value['Preacher'] ?? "Select Japa Coordinator";
-
-      });
-      } catch(e) {
+          userNameController.text = value['Name'] ?? "";
+          userDateOfBirthController.text = value['Date'] ?? "";
+          userEmailController.text = value['Email'] ?? "";
+          userGenderController.text = value['Gender'] ?? "Male";
+          dropdownValue = value['Gender'] ?? "Male";
+          giftCenterValue = value['Gift-Center'] ?? "Select Gifts Center";
+          preacherValue = value['Preacher'] ?? "Select Japa Coordinator";
+          userDateOfAnniverserryController.text = value['DOA'] ?? "";
+        });
+      } catch (e) {
         print(e);
       }
     });
-
   }
 
   String formatDate(String? dateTime,
@@ -143,9 +149,7 @@ class _EditProfileState extends State<EditProfile> {
     });
     final storage = FirebaseStorage.instance;
     final filename = basename(_imageFile!.path);
-    final uploadTask = storage
-        .ref()
-        .putFile(_imageFile!);
+    final uploadTask = storage.ref().putFile(_imageFile!);
     final snapshot = await uploadTask;
     final downloadUrl = await snapshot.ref.getDownloadURL();
     setState(() {
@@ -166,9 +170,7 @@ class _EditProfileState extends State<EditProfile> {
       });
       final storage = FirebaseStorage.instance;
       final filename = basename(_imageFile!.path);
-      final uploadTask = storage
-          .ref()
-          .putFile(_imageFile!);
+      final uploadTask = storage.ref().putFile(_imageFile!);
       final snapshot = await uploadTask;
       final downloadUrl = await snapshot.ref.getDownloadURL();
       setState(() {
@@ -177,7 +179,8 @@ class _EditProfileState extends State<EditProfile> {
       });
       FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadUrl);
       print('Download URL: $downloadUrl');
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
       Restart.restartApp();
     }
 
@@ -190,160 +193,106 @@ class _EditProfileState extends State<EditProfile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    FirebaseAuth.instance.currentUser?.photoURL == null
-                        ? CircleAvatar(
-                            radius: 90,
-                            backgroundColor: Colors.grey[300],
-                            child: IconButton(
-                              icon: Icon(Icons.add_a_photo),
-                              iconSize: 70,
-                              onPressed: _pickImageAndUpload,
-                            ),
-                          )
-                        : Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                      final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      File image = File(pickedFile.path);
-
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference reference = FirebaseStorage.instance.ref().child('ProfileImages').child(fileName);
-
-      await reference.putFile(image);
-      String downloadURL = await reference.getDownloadURL();
-      FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadURL);
-      print('Download URL: $downloadURL');
-    }
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
-                                },
-                                child: CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage: NetworkImage(
-                                      '${FirebaseAuth.instance.currentUser?.photoURL}'),
-                                ),
-                              ),
-                              _isUploading
-                                  ? CircularProgressIndicator()
-                                  : SizedBox.shrink(),
-                            ],
-                          ),
-                  ],
-                ),
                 Column(children: [
                   SizedBox(height: 30),
                   Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                            padding: EdgeInsets.fromLTRB(10,2,10,2),
-              decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(20),
-                 border: Border.all(color: Colors.orange)
-              ),
-              child: TextField(
-                keyboardType: TextInputType.name,
-                
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  labelText: "Full Name",
-                  
-                ),
-  controller: userNameController,
-              ),
-            ),
-          ),
-                  SizedBox(height: 20),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.orange)),
+                      child: TextField(
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: "Full Name",
+                        ),
+                        controller: userNameController,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10,2,10,2),
-              decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(20),
-                 border: Border.all(color: Colors.orange)
-              ),
-              child: TextField(
-                    controller: userDateOfBirthController,
-                    focusNode: f3,
-                    readOnly: true,
-                    onTap: () {
-                      selectDateAndTime(context);
-                    },
-                    decoration: inputDecoration(
-                      context,
-                      hintText: "Date of Birth",
-                      suffixIcon: Icon(Icons.calendar_month_rounded,
-                          size: 16, color: false ? white : gray),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.orange)),
+                      child: TextField(
+                        controller: userDateOfBirthController,
+                        focusNode: f3,
+                        readOnly: true,
+                        onTap: () {
+                          selectDateAndTime(context);
+                        },
+                        decoration: inputDecoration(
+                          context,
+                          hintText: "Date of Birth",
+                          suffixIcon: Icon(Icons.calendar_month_rounded,
+                              size: 16, color: false ? white : gray),
+                        ),
+                      ),
                     ),
-                    
                   ),
-                  
-            ),
-          ),
-            Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10,2,10,2),
-              decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(20),
-                 border: Border.all(color: Colors.orange)
-              ),
-              child: TextField(
-                    controller: userDateOfAnniverserryController,
-                    focusNode: f7,
-                    readOnly: true,
-                    onTap: () {
-                      selectDateAndTime2(context);
-                    },
-                    decoration: inputDecoration(
-                      context,
-                      hintText: "Date Of Anniversary",
-                      suffixIcon: Icon(Icons.calendar_month_rounded,
-                          size: 16, color: false ? white : gray),
-                    ),
-                    
-                  ),
-                  
-            ),
-          ),      
-                  SizedBox(height: 20),
+                  10.height,
                   Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10,2,10,2),
-              decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(20),
-                 border: Border.all(color: Colors.orange)
-              ),
-              child:  TextField(
-                    controller: userEmailController,
-                    focusNode: f4,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: inputDecoration(
-                      context,
-                      hintText: "Email",
-                      suffixIcon: Icon(Icons.mail_outline_rounded,
-                          size: 16, color: false ? white : gray),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.orange)),
+                      child: TextField(
+                        controller: userDateOfAnniverserryController,
+                        focusNode: f7,
+                        readOnly: true,
+                        onTap: () {
+                          selectDateAndTime2(context);
+                        },
+                        onChanged: (value) {
+                          userDateOfAnniverserryController.text = value;
+                        },
+                        decoration: inputDecoration(
+                          context,
+                          hintText: "Date Of Anniversary",
+                          suffixIcon: Icon(Icons.calendar_month_rounded,
+                              size: 16, color: false ? white : gray),
+                        ),
+                      ),
                     ),
                   ),
-            ),
-          ),
-                 
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.orange)),
+                      child: TextField(
+                        controller: userEmailController,
+                        focusNode: f4,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: inputDecoration(
+                          context,
+                          hintText: "Email",
+                          suffixIcon: Icon(Icons.mail_outline_rounded,
+                              size: 16, color: false ? white : gray),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       decoration: boxDecorationWithRoundedCorners(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(20)),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
                         border: Border.all(color: Colors.orange),
-                        backgroundColor: false ? cardDarkColor : Color(0xFFF8F8F8),
+                        backgroundColor:
+                            false ? cardDarkColor : Color(0xFFF8F8F8),
                       ),
                       padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                       child: DropdownButton<String>(
@@ -365,137 +314,172 @@ class _EditProfileState extends State<EditProfile> {
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            
                             child: Text(value),
                           );
                         }).toList(),
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  StreamBuilder<QuerySnapshot>(stream: FirebaseFirestore.instance.collection('Gift-Centers').snapshots(), builder: (context, snapshot) {
+                  SizedBox(
+                    height: 10,
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Gift-Centers')
+                        .snapshots(),
+                    builder: (context, snapshot) {
                       List<DropdownMenuItem<String>> giftCenterItems = [];
 
-                      if(!snapshot.hasData) {
-
+                      if (!snapshot.hasData) {
                       } else {
                         final giftCenter = snapshot.data!.docs.toList();
                         for (var center in giftCenter) {
-                          giftCenterItems.add(DropdownMenuItem<String>(value: center['Name'].toString(), child: Text(center['Name'].toString()),));
+                          giftCenterItems.add(DropdownMenuItem<String>(
+                            value: center['Name'].toString(),
+                            child: Text(center['Name'].toString()),
+                          ));
                         }
                       }
-                      return  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: boxDecorationWithRoundedCorners(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(20)),
-                        border: Border.all(color: Colors.orange),
-                        backgroundColor: false ? cardDarkColor : Color(0xFFF8F8F8),
-                      ),
-                      padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: DropdownButton<String>(
-                        value: giftCenterValue,
-                        elevation: 16,
-                        style: primaryTextStyle(),
-                        hint: Text('Select Gifts Center', style: primaryTextStyle()),
-                        isExpanded: true,
-                        underline: Container(
-                          height: 0,
-                          color: Colors.deepPurpleAccent,
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: boxDecorationWithRoundedCorners(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            border: Border.all(color: Colors.orange),
+                            backgroundColor:
+                                false ? cardDarkColor : Color(0xFFF8F8F8),
+                          ),
+                          padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                          child: DropdownButton<String>(
+                            value: giftCenterValue,
+                            elevation: 16,
+                            style: primaryTextStyle(),
+                            hint: Text('Select Gifts Center',
+                                style: primaryTextStyle()),
+                            isExpanded: true,
+                            underline: Container(
+                              height: 0,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            onChanged: (newValue) {
+                              setState(() {
+                                giftCenterValue = newValue.toString();
+                                print(giftCenterValue);
+                              });
+                            },
+                            items: giftCenterItems,
+                          ),
                         ),
-
-                        onChanged: (newValue) {
-                          setState(() {
-                            giftCenterValue = newValue.toString();
-                            print (giftCenterValue);
-                          });
-                        },
-                        items: giftCenterItems,
-                      ),
-                    ),
-                  );
-                  },),
-                  StreamBuilder<QuerySnapshot>(stream: FirebaseFirestore.instance.collection('Preachers').snapshots(), builder: (context, snapshot) {
+                      );
+                    },
+                  ),
+                  10.height,
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Preachers')
+                        .snapshots(),
+                    builder: (context, snapshot) {
                       List<DropdownMenuItem<String>> preacherItems = [];
 
-                      if(!snapshot.hasData) {
-
+                      if (!snapshot.hasData) {
                       } else {
                         final preachers = snapshot.data!.docs.toList();
                         for (var preacher in preachers) {
-                          preacherItems.add(DropdownMenuItem<String>(value: preacher['Name'].toString(), child: Text(preacher['Name'].toString()),));
+                          preacherItems.add(DropdownMenuItem<String>(
+                            value: preacher['Name'].toString(),
+                            child: Text(preacher['Name'].toString()),
+                          ));
                         }
                       }
-                      return  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: boxDecorationWithRoundedCorners(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(20)),
-                        border: Border.all(color: Colors.orange),
-                        backgroundColor: false ? cardDarkColor : Color(0xFFF8F8F8),
-                      ),
-                      padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                      child: DropdownButton<String>(
-                        value: preacherValue,
-                        elevation: 16,
-                        style: primaryTextStyle(),
-                        hint: Text('Select Japa Coordinator', style: primaryTextStyle()),
-                        isExpanded: true,
-                        underline: Container(
-                          height: 0,
-                          color: Colors.deepPurpleAccent,
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: boxDecorationWithRoundedCorners(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            border: Border.all(color: Colors.orange),
+                            backgroundColor:
+                                false ? cardDarkColor : Color(0xFFF8F8F8),
+                          ),
+                          padding: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                          child: DropdownButton<String>(
+                            value: preacherValue,
+                            elevation: 16,
+                            style: primaryTextStyle(),
+                            hint: Text('Select Japa Coordinator',
+                                style: primaryTextStyle()),
+                            isExpanded: true,
+                            underline: Container(
+                              height: 0,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            onChanged: (newValue) {
+                              setState(() {
+                                preacherValue = newValue.toString();
+                              });
+                            },
+                            items: preacherItems,
+                          ),
                         ),
-
-                        onChanged: (newValue) {
-                          setState(() {
-                            preacherValue = newValue.toString();
-                          });
-                        },
-                        items: preacherItems,
-                      ),
-                    ),
-                  );
-                  },),
-                 
+                      );
+                    },
+                  ),
                 ]),
-                
+                SizedBox(height: 160,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  child: ElevatedButton(onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
-                      await FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
-                        "Name": userNameController.text,
-                        "Date": userDateOfBirthController.text,
-                        "Email": userEmailController.text,
-                        "Gender": dropdownValue,
-                      });
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection("Users")
+                            .doc(FirebaseAuth.instance.currentUser?.uid)
+                            .set({
+                          "Name": userNameController.text,
+                          "Date": userDateOfBirthController.text,
+                          "Email": userEmailController.text,
+                          "Gender": dropdownValue,
+                          "Gift-Center": giftCenterValue,
+                          "Preacher": preacherValue,
+                          "DOA": userDateOfAnniverserryController.text
+                        });
+                        await FirebaseAuth.instance.currentUser
+                            ?.updateDisplayName(userNameController.text);
+                        await FirebaseAuth.instance.currentUser
+                            ?.updateEmail(userEmailController.text);
 
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NaviBottomNavBar()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => NaviBottomNavBar()));
+                      } catch (e) {
+                        print("E");
+                        await FirebaseFirestore.instance
+                            .collection("Users")
+                            .doc(FirebaseAuth.instance.currentUser?.uid)
+                            .set({
+                          "Name": userNameController.text,
+                          "Date": userDateOfBirthController.text,
+                          "Email": userEmailController.text,
+                          "Gender": dropdownValue,
+                          "Gift-Center": giftCenterValue,
+                          "Preacher": preacherValue,
+                          "DOA": userDateOfAnniverserryController.text
+                        });
 
-                    } catch (e) {
-                      print ("E");
-                      await FirebaseAuth.instance.currentUser?.updateEmail(userEmailController.text);
+                        await FirebaseAuth.instance.currentUser
+                            ?.updateEmail(userEmailController.text);
 
-                      await FirebaseAuth.instance.currentUser?.updateDisplayName(userNameController.text);
-                      await FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser?.uid).set({
-                        "Name": userNameController.text,
-                        "Date": userDateOfBirthController.text,
-                        "Email": userEmailController.text,
-                        "Gender": dropdownValue,
-                        "DOA": userDateOfAnniverserryController,
-                        "Gift-Center": giftCenterValue,
-                        "Preacher": preacherValue
-                      });
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  NaviBottomNavBar()));
-                    }
-                  }, child: Text("Update", style: TextStyle(color: Colors.white)),           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange 
+                        await FirebaseAuth.instance.currentUser
+                            ?.updateDisplayName(userNameController.text);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => NaviBottomNavBar()));
+                      }
+                    },
+                    child:
+                        Text("Update", style: TextStyle(color: Colors.white)),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.orange
                             // This is what you need!
-                          ),
-                ),
+                            ),
+                  ),
                 )
               ],
             ),

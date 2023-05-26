@@ -1,4 +1,4 @@
-package org.hkmhyderabad.harekrishnagoldentemple
+package com.hkmhyderabad.harekrishnagoldentemple
 
 import io.flutter.embedding.android.FlutterActivity
 

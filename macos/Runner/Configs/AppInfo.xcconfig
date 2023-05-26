@@ -8,7 +8,7 @@
 PRODUCT_NAME = harekrishnagoldentemple
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = org.hkmhyderabad.harekrishnagoldentemple
+PRODUCT_BUNDLE_IDENTIFIER = com.hkmhyderabad.harekrishnagoldentemple
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 org.hkmhyderabad. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.hkmhyderabad. All rights reserved.

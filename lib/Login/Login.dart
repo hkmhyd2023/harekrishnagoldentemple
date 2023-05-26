@@ -2,6 +2,7 @@ import 'package:country_calling_code_picker/picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart';
 import 'package:harekrishnagoldentemple/Home/home.dart';
 import 'package:harekrishnagoldentemple/Login/otp_login.dart';
 import 'package:harekrishnagoldentemple/Login/utils/constant.dart';
@@ -153,6 +154,40 @@ class _LogInState extends State<LogIn> {
                         color: Colors.white)),
               ),
             ),
+            SizedBox(height: 20,),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(16),
+                  textStyle: TextStyle(fontSize: 16),
+                  shape: StadiumBorder(),
+                  elevation: 0,
+                  
+                  backgroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  NaviBottomNavBar()));
+                },
+                child: Text("Skip For Now",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.orange)),
+              ),
+            ),
+            SizedBox(height: 10,),
+            Column(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  mainAxisSize: MainAxisSize.max,
+  mainAxisAlignment: MainAxisAlignment.end,
+  
+  children: <Widget>[
+      Container(child: Text("Don't Worry! We Shall Not Share")),
+      
+      Container(child: Text("Your Personal Information"))
+  ],
+),
           ]),
         ),
       ),

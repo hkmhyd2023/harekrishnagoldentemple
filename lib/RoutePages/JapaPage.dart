@@ -274,35 +274,72 @@ class _JapaPageState extends State<JapaPage> {
                 body: TabBarView(
                   children: [
                     Align(child: SingleChildScrollView(child: Padding(padding: EdgeInsets.all(8.0), child: Column(children: [
-                      CachedNetworkImage(
-                                
-                                imageUrl: "https://i.pinimg.com/736x/74/29/85/74298590b4704ad19896624b0a2ed81c.jpg",
-  imageBuilder: (context, imageProvider) => Container(
-    height: 300,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      
-      image: DecorationImage(
-        
-        image: imageProvider, fit: BoxFit.cover, ),
-    ),
-  ),
-                                
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                      
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    height: 300,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                      StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection('Japa-Yagna').doc('Detail-Image').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    child: Container(
+                      height: 250.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double.infinity, // Adjust the width of the container according to your needs
+                          height: 200, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                final data = snapshot.data!.data() as Map<String, dynamic>?;
+                final imageUrl = data?['Image'] as String?;
+                if (imageUrl == null) {
+                  return const Center(child: Text('No image available'));
+                }
+
+                return GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: 255,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double.infinity, // Adjust the width of the container according to your needs
+                          height: 255, // Adjust the height of the container according to your needs
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
                           SizedBox(
                             height: 20,
                           ),

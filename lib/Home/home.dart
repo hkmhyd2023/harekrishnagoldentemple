@@ -8,6 +8,7 @@ import 'package:harekrishnagoldentemple/Home/widgets/carousel_loading.dart';
 import 'package:harekrishnagoldentemple/Home/widgets/carousel_with_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:harekrishnagoldentemple/Login/Login.dart';
 import 'package:harekrishnagoldentemple/Music/music.dart';
 import 'package:harekrishnagoldentemple/Notifications.dart';
 import 'package:harekrishnagoldentemple/Prabhupada/prabhupada_entry.dart';
@@ -27,6 +28,110 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../krishna_lila/krishna_lila_entry.dart';
+
+class CustomDialogExample3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: context.cardColor,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10.0,
+                offset: const Offset(0.0, 10.0)),
+          ],
+        ),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text('Dear Devotee 🙏🏻',
+                      style: boldTextStyle(color: Colors.black, size: 22)),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    finish(context);
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(16),
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.close, color: Colors.black)),
+                ),
+              ],
+            ),
+            Image(
+                image: AssetImage('assets/widgettrophy.png'),
+                height: 120,
+                width: 190,
+                fit: BoxFit.cover),
+            24.height,
+            Text('Hare Krishna 🙏🏻',
+                style: boldTextStyle(color: Colors.black, size: 24)),
+            16.height,
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Text("Please login to access this feature",
+                  style: secondaryTextStyle(color: Colors.black)),
+            ),
+            30.height,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(""),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        finish(context);
+                      },
+                      child: Text(
+                        "CANCEL",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, elevation: 0),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => LogIn()));
+                      },
+                      child: Text(
+                        "LOG IN",
+                        style: TextStyle(color: Colors.orange.shade800),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0, backgroundColor: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -56,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text("Hare Krishna 🙏🏻", style: secondaryTextStyle()),
             const SizedBox(height: 5),
-            Text("${FirebaseAuth.instance.currentUser?.displayName}", style: boldTextStyle()),
+            Text("${FirebaseAuth.instance.currentUser?.displayName ?? "Devotee"}", style: boldTextStyle()),
           ],
         ),
         actions: [
@@ -74,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.share, size: 22, color: Colors.black),
             onPressed: () async {
               await Share.share(
-                "https://play.google.com/store/apps/details?id=org.hkmhyderabad.harekrishnagoldentemple"
+                "https://play.google.com/store/apps/details?id=com.hkmhyderabad.harekrishnagoldentemple"
               );
             },
           ),
@@ -446,7 +551,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
-                      height: 250.0,
+                      height: 270.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: const BorderRadius.all(Radius.circular(80.0)),
@@ -475,7 +580,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => JapaPage()));
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      showDialog(context: context, builder: (BuildContext context) => CustomDialogExample3());
+                    } else {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => JapaPage()));
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -501,7 +610,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      height: 270,
+                      height: 300,
                     ),
                   ),
                 );

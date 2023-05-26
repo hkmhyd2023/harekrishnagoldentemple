@@ -64,8 +64,12 @@ class AppDrawerComponent extends StatelessWidget {
                         padding: EdgeInsets.all(16),
                         child: GestureDetector(
                           onTap: () {
-                            finish(context);
+                            if (FirebaseAuth.instance.currentUser != null) {
+                              finish(context);
                             Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                            } else {
+                              showDialog(context: context, builder: (BuildContext context) => CustomDialogExample3());
+                            }
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +79,7 @@ class AppDrawerComponent extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('${FirebaseAuth.instance.currentUser?.displayName}', style: boldTextStyle(size: 22)),
+                                  Text('${FirebaseAuth.instance.currentUser?.displayName ?? "Devotee"}', style: boldTextStyle(size: 22)),
                                   Icon(Icons.arrow_forward_ios, size: 22),
                                 ],
                               ),
@@ -105,8 +109,13 @@ class AppDrawerComponent extends StatelessWidget {
                         leading: Image.asset('assets/om.png', color: Colors.orange, height: 22, width: 22,),
                         title: Text('Japa', style: primaryTextStyle()),
                         onTap: () {
-                          finish(context);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => JapaPage()));
+                          
+                            if (FirebaseAuth.instance.currentUser != null) {
+                              finish(context);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => JapaPage()));
+                            } else {
+                              showDialog(context: context, builder: (BuildContext context) => CustomDialogExample3());
+                            }
                         },
                       ),
 
@@ -131,7 +140,7 @@ class AppDrawerComponent extends StatelessWidget {
                         title: Text('Share', style: primaryTextStyle()),
                         onTap: () async {
                                   await Share.share(
-                "https://play.google.com/store/apps/details?id=org.hkmhyderabad.harekrishnagoldentemple"
+                "https://play.google.com/store/apps/details?id=com.hkmhyderabad.harekrishnagoldentemple"
               );
                         },
                       ),

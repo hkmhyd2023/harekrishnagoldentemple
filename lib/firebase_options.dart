@@ -65,6 +65,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'hare-krishna-golden-temp-b1785.appspot.com',
     androidClientId: '417701020381-v5fqc0ok8aii79ehbthh87l3hepetd0v.apps.googleusercontent.com',
     iosClientId: '417701020381-g37ubj0fo7d4cvve3ej7vtl1e00kkcc3.apps.googleusercontent.com',
-    iosBundleId: 'org.hkmhyderabad.harekrishnagoldentemple',
+    iosBundleId: 'com.hkmhyderabad.harekrishnagoldentemple',
   );
 }
