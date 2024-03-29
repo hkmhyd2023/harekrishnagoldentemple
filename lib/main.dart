@@ -16,9 +16,14 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.instance.getToken().then((value) {
+    String? token = value;
+      print (token);
 
-  Get.lazyPut(() => CarouselController());
+  });
+
+  
+    Get.lazyPut(() => CarouselController());
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("FCM Message Received: ${message.notification?.title}");
     // Handle the notification here
@@ -72,7 +77,7 @@ class MyApp extends StatelessWidget {
         }
       },
         theme: ThemeData(
-          primarySwatch: Colors.orange,
+          primarySwatch: Colors.deepOrange,
         ),
         home: NaviBottomNavBar(),
       );

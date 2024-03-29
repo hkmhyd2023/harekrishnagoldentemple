@@ -424,7 +424,7 @@ class _EditProfileState extends State<EditProfile> {
                     },
                   ),
                 ]),
-                SizedBox(height: 160,),
+                SizedBox(height: 25,),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ElevatedButton(

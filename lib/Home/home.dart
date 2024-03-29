@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +18,8 @@ import 'package:harekrishnagoldentemple/RoutePages/Darshans.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Ekadashi_Reminders.dart';
 import 'package:harekrishnagoldentemple/RoutePages/JapaPage.dart';
 import 'package:harekrishnagoldentemple/Satvik-Recipes/Recipes-Category.dart';
+import 'package:harekrishnagoldentemple/Seek_Divine_Blessings/Seek_Divine_Blessings_LIS.dart';
+import 'package:harekrishnagoldentemple/Seek_Divine_Blessings/Seva_Detail.dart';
 import 'package:harekrishnagoldentemple/SoulfulJapa/SoulfulJapaEntry.dart';
 import 'package:harekrishnagoldentemple/SoulfulJapa/SoulfulJapaVideos.dart';
 import 'package:harekrishnagoldentemple/RoutePages/Upcoming_Festival_Detial.dart';
@@ -26,6 +30,7 @@ import 'package:harekrishnagoldentemple/chaitanyaLilamrita/chaitanyaMahaprabhuEn
 import 'package:nb_utils/nb_utils.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../krishna_lila/krishna_lila_entry.dart';
 
@@ -110,7 +115,8 @@ class CustomDialogExample3 extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => LogIn()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => LogIn()));
                       },
                       child: Text(
                         "LOG IN",
@@ -141,6 +147,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  YoutubePlayerController _controller = YoutubePlayerController(
+    initialVideoId: 'xw9gIA1jR7Q',
+  );
+
+  
+List<String> runningTextList = [
+  'Your running text here',
+  'Your running text here',
+  'Your running text here',
+];
+   @override
+  void initState() {
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     String user_name = "";
@@ -155,18 +177,23 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         elevation: 9,
         toolbarHeight: 50,
-        backgroundColor: false ? scaffoldDarkColor : white,
+        backgroundColor: true ? Colors.orange.shade300 : white,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Hare Krishna 🙏🏻", style: secondaryTextStyle()),
+            Text("Hare Krishna 🙏🏻",
+                style: secondaryTextStyle(color: Colors.white)),
             const SizedBox(height: 5),
-            Text("${FirebaseAuth.instance.currentUser?.displayName ?? "Devotee"}", style: boldTextStyle()),
+            Text(
+                "${FirebaseAuth.instance.currentUser?.displayName ?? "Devotee"}",
+                style: boldTextStyle(color: Colors.white)),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none_rounded, size: 22, color: Colors.black),
+            color: black,
+            icon: const Icon(Icons.notifications_none_rounded,
+                size: 22, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -174,13 +201,11 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          
           IconButton(
-            icon: const Icon(Icons.share, size: 22, color: Colors.black),
+            icon: const Icon(Icons.share, size: 22, color: Colors.white),
             onPressed: () async {
               await Share.share(
-                "https://play.google.com/store/apps/details?id=com.hkmhyderabad.harekrishnagoldentemple"
-              );
+                  "https://play.google.com/store/apps/details?id=com.hkmhyderabad.harekrishnagoldentemple");
             },
           ),
         ],
@@ -200,19 +225,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Darshan",
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      "Daily Darshan",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                   ),
                   GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Darshans()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Darshans()));
                       },
                       child: Align(
                         alignment: Alignment.topRight,
                         child: Text(
                           "View All",
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.orange.shade800),
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange.shade800),
                         ),
                       ))
                 ],
@@ -220,7 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Darshans()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Darshans()));
               },
               child: Obx(
                 () {
@@ -230,13 +263,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   } else {
                     if (carouselController.carouselItemList.isNotEmpty) {
-                      return CarouselWithIndicator(data: carouselController.carouselItemList);
+                      return CarouselWithIndicator(
+                          data: carouselController.carouselItemList);
                     } else {
                       return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [Icon(Icons.hourglass_empty), Text("Data not found!")],
+                          children: const [
+                            Icon(Icons.hourglass_empty),
+                            Text("Data not found!")
+                          ],
                         ),
                       );
                     }
@@ -250,6 +287,109 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
+                    "Seek Divine Blessings",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const SDBLIS()));
+                      },
+                      child: Text(
+                        "View All",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange.shade800),
+                      ))
+                ],
+              ),
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Seva-Slider")
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                if (!snapshot.hasData) {
+                  return const Text('No data found');
+                }
+                return GestureDetector(
+                  child: Container(
+                    height: 320,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 9.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.size,
+                        itemBuilder: (BuildContext context, int index) {
+                          final DocumentSnapshot document =
+                              snapshot.data!.docs[index];
+                          return sevaCard(
+                              document['Image'],
+                              document['Seva-Name'],
+                              document['Seva-Caption'],
+                              document['Seva-ID'],
+                              document['Dropdown_Item'],
+                              context);
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Live Darshan",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: YoutubePlayer(
+                          controller: _controller,
+                          showVideoProgressIndicator: true,
+                          progressIndicatorColor: Colors.blueAccent,
+                        ),
+                      ),
+                     
+                      
+                    ],
+                  ),
+                );
+              },
+            );
+            // Start automatic scrolling after the widget is built
+           
+          },
+          child: Text('Open YouTube Video'),
+        ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
                     "Upcoming Festival",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
@@ -257,23 +397,36 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance.collection('Upcoming-Festival').doc('w6uTK0hEPNlWKRydt1ho').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection('Upcoming-Festival')
+                  .doc('w6uTK0hEPNlWKRydt1ho')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -297,7 +450,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Container(
-                      decoration: boxDecorationDefault(borderRadius: radius(32), color: context.cardColor),
+                      decoration: boxDecorationDefault(
+                          borderRadius: radius(32), color: context.cardColor),
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
@@ -305,7 +459,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               CachedNetworkImage(
                                 imageUrl: imageUrl,
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   width: 80.0,
                                   height: 80.0,
                                   decoration: BoxDecoration(
@@ -316,12 +471,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) => Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.orange.shade300,
+                                  highlightColor: Colors.orange.shade100,
                                   child: Container(
-                                    width: 80, // Adjust the width of the container according to your needs
-                                    height: 80, // Adjust the height of the container according to your needs
+                                    width:
+                                        80, // Adjust the width of the container according to your needs
+                                    height:
+                                        80, // Adjust the height of the container according to your needs
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8.0),
@@ -334,11 +492,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("${title}", style: boldTextStyle(size: 18, weight: FontWeight.w500)),
+                                  Text("${title}",
+                                      style: boldTextStyle(
+                                          size: 18, weight: FontWeight.w500)),
                                   8.height,
-                                  Text('${temple}', style: primaryTextStyle(color: Colors.blue, size: 14)),
+                                  Text('${temple}',
+                                      style: primaryTextStyle(
+                                          color: Colors.orange, size: 14)),
                                   8.height,
-                                  Text('${date}', style: primaryTextStyle(size: 14))
+                                  Text('${date}',
+                                      style: primaryTextStyle(size: 14))
                                 ],
                               ).expand(),
                             ],
@@ -346,14 +509,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           16.height,
                           AppButton(
                             text: 'View Details',
-                            textStyle: primaryTextStyle(size: 15),
+                            textStyle:
+                                primaryTextStyle(size: 15, color: Colors.white),
                             color: Colors.orange.shade300,
-                            shapeBorder: RoundedRectangleBorder(borderRadius: radius(16)),
+                            shapeBorder: RoundedRectangleBorder(
+                                borderRadius: radius(16)),
                             onTap: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Upcoming_Festival_Detail(
+                                      builder: (context) =>
+                                          Upcoming_Festival_Detail(
                                             image_url: imageUrl,
                                             title: title,
                                             date: date,
@@ -377,33 +543,51 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Ekadashi_Reminders()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Ekadashi_Reminders()));
                       },
                       child: Text(
                         "View All",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.orange.shade800),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange.shade800),
                       ))
                 ],
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection("Upcoming-Event").snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection("Upcoming-Event")
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -415,19 +599,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 if (!snapshot.hasData) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -444,10 +637,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (BuildContext context, int index) {
-                      final DocumentSnapshot document = snapshot.data!.docs[index];
+                      final DocumentSnapshot document =
+                          snapshot.data!.docs[index];
                       return Container(
                         width: 300,
-                        margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 10.0),
                         child: Stack(
                           children: <Widget>[
                             Container(
@@ -456,35 +651,54 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: context.scaffoldBackgroundColor,
                                 shape: BoxShape.rectangle,
                                 boxShadow: <BoxShadow>[
-                                  const BoxShadow(color: Color(0x95E9EBF0), blurRadius: 0.5, spreadRadius: 0.5),
+                                  const BoxShadow(
+                                      color: Color(0x95E9EBF0),
+                                      blurRadius: 0.5,
+                                      spreadRadius: 0.5),
                                 ],
                                 borderRadius: BorderRadius.circular(40.0),
                               ),
                               child: Container(
-                                margin: const EdgeInsets.only(left: 55.0, right: 16),
+                                margin: const EdgeInsets.only(
+                                    left: 55.0, right: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Text(document["Title"], style: primaryTextStyle(color: const Color(0xFFfc4a1a)), maxLines: 2),
+                                    Text(document["Title"],
+                                        style: primaryTextStyle(
+                                            color: const Color(0xFFfc4a1a)),
+                                        maxLines: 2),
                                     const SizedBox(height: 4),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        Text(document["Date"], style: primaryTextStyle(color: const Color(0xFF8BC34A), size: 16)),
+                                        Text(document["Date"],
+                                            style: primaryTextStyle(
+                                                color: const Color(0xFF8BC34A),
+                                                size: 16)),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
                                     Row(
                                       children: <Widget>[
-                                        CircleAvatar(backgroundImage: AssetImage(document["Gopuram-Image"]), radius: 20),
+                                        CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                                document["Gopuram-Image"]),
+                                            radius: 20),
                                         Container(
-                                          margin: const EdgeInsets.only(left: 10),
+                                          margin:
+                                              const EdgeInsets.only(left: 10),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Text("Fast Break", style: primaryTextStyle()),
-                                              Text(document['fast-break'], style: secondaryTextStyle(size: 12)),
+                                              Text("Fast Break",
+                                                  style: primaryTextStyle()),
+                                              Text(document['fast-break'],
+                                                  style: secondaryTextStyle(
+                                                      size: 12)),
                                             ],
                                           ),
                                         )
@@ -498,7 +712,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               alignment: FractionalOffset.centerLeft,
                               child: CachedNetworkImage(
                                 imageUrl: document['Main-Image'],
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   width: 80.0,
                                   height: 40.0,
                                   decoration: BoxDecoration(
@@ -509,7 +724,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) => Shimmer.fromColors(
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
                                   baseColor: Colors.grey.shade300,
                                   highlightColor: Colors.grey.shade100,
                                   child: Container(
@@ -545,23 +761,36 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance.collection('Japa-Yagna').doc('D4JgsdNwGRY97dnZclh3').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection('Japa-Yagna')
+                  .doc('D4JgsdNwGRY97dnZclh3')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 270.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -581,9 +810,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 return GestureDetector(
                   onTap: () {
                     if (FirebaseAuth.instance.currentUser == null) {
-                      showDialog(context: context, builder: (BuildContext context) => CustomDialogExample3());
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              CustomDialogExample3());
                     } else {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => JapaPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => JapaPage()));
                     }
                   },
                   child: Padding(
@@ -642,29 +875,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {},
                       child: Text(
                         "View All",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.orange.shade800),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange.shade800),
                       ))
                 ],
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection("Library-Carousel").snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection("Library-Carousel")
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -676,19 +924,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 if (!snapshot.hasData) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -707,18 +964,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       itemCount: snapshot.data!.size,
                       itemBuilder: (BuildContext context, int index) {
-                        final DocumentSnapshot document = snapshot.data!.docs[index];
+                        final DocumentSnapshot document =
+                            snapshot.data!.docs[index];
                         return Library_Card(
                           img: document['Image'],
                           txtHeader: document['Header'],
                           txtSize: 48.0,
                           navigatorOntap: () {
                             if (index == 1) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Stories()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Stories()));
                             } else if (index == 0) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const WebSeriesEntry()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const WebSeriesEntry()));
                             } else {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Music()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Music()));
                             }
                           },
                         );
@@ -741,23 +1009,36 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance.collection('Japa-Yagna').doc('SoulfulJapa').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection('Japa-Yagna')
+                  .doc('SoulfulJapa')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -776,7 +1057,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SFJE()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const SFJE()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -796,8 +1078,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 230, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              230, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -820,33 +1104,49 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RCategories()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const RCategories()));
                       },
                       child: Text(
                         "View All",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.orange.shade800),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange.shade800),
                       ))
                 ],
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection("Recipes-Carousel").snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection("Recipes-Carousel")
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -858,19 +1158,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 if (!snapshot.hasData) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 20.0),
                     child: Container(
                       height: 250.0,
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(80.0)),
-                          boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.1), blurRadius: 3.0, spreadRadius: 1.0)]),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(80.0)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black12.withOpacity(0.1),
+                                blurRadius: 3.0,
+                                spreadRadius: 1.0)
+                          ]),
                       child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(
-                          width: double.infinity, // Adjust the width of the container according to your needs
-                          height: 200, // Adjust the height of the container according to your needs
+                          width: double
+                              .infinity, // Adjust the width of the container according to your needs
+                          height:
+                              200, // Adjust the height of the container according to your needs
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.0),
@@ -887,12 +1196,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (BuildContext context, int index) {
-                      final DocumentSnapshot document = snapshot.data!.docs[index];
+                      final DocumentSnapshot document =
+                          snapshot.data!.docs[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RCategories()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const RCategories()));
                         },
-                        child: _recipeCard(document['Image'], document['Title'], document['Time'], document['Calories']),
+                        child: _recipeCard(document['Image'], document['Title'],
+                            document['Time'], document['Calories']),
                       );
                     },
                   ),
@@ -910,18 +1222,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const YatraList()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const YatraList()));
                       },
                       child: Text(
                         "View All",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.orange.shade800),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange.shade800),
                       ))
                 ],
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection("Yatra-Slider").snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection("Yatra-Slider")
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
@@ -930,7 +1249,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const YatraList()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const YatraList()));
                   },
                   child: Container(
                     height: 320,
@@ -941,8 +1261,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.size,
                         itemBuilder: (BuildContext context, int index) {
-                          final DocumentSnapshot document = snapshot.data!.docs[index];
-                          return yatraCard(document['Image'], document['Title'], document['Location'], document['Rating'], document['ID'], document['Discount'], context);
+                          final DocumentSnapshot document =
+                              snapshot.data!.docs[index];
+                          return yatraCard(
+                              document['Image'],
+                              document['Title'],
+                              document['Location'],
+                              document['Rating'],
+                              document['ID'],
+                              document['Discount'],
+                              context);
                         },
                       ),
                     ),
@@ -956,7 +1284,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget yatraCard(String image, title, location, ratting, id, int discount, BuildContext context) {
+  Widget yatraCard(String image, title, location, ratting, id, int discount,
+      BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -972,10 +1301,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 220.0,
                   width: 160.0,
                   decoration: BoxDecoration(
-                      image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover),
+                      image: DecorationImage(
+                          image: NetworkImage(image), fit: BoxFit.cover),
                       color: Colors.black12,
-                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                      boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black12.withOpacity(0.1), spreadRadius: 2.0)]),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 5.0,
+                            color: Colors.black12.withOpacity(0.1),
+                            spreadRadius: 2.0)
+                      ]),
                 ),
               ),
             ),
@@ -985,7 +1321,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Text(
             title,
-            style: const TextStyle(fontFamily: "Sofia", fontWeight: FontWeight.w600, fontSize: 17.0, color: Colors.black87),
+            style: const TextStyle(
+                fontFamily: "Sofia",
+                fontWeight: FontWeight.w600,
+                fontSize: 17.0,
+                color: Colors.black87),
           ),
           const SizedBox(
             height: 2.0,
@@ -1001,7 +1341,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Text(
                 location,
-                style: const TextStyle(fontFamily: "Sofia", fontWeight: FontWeight.w500, fontSize: 15.0, color: Colors.black26),
+                style: const TextStyle(
+                    fontFamily: "Sofia",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.0,
+                    color: Colors.black26),
               ),
             ],
           ),
@@ -1018,7 +1362,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(top: 3.0),
                 child: Text(
                   ratting,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontFamily: "Sofia", fontSize: 13.0),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontFamily: "Sofia",
+                      fontSize: 13.0),
                 ),
               ),
               const SizedBox(
@@ -1027,9 +1374,15 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: 27.0,
                 width: 82.0,
-                decoration: const BoxDecoration(color: Colors.blueAccent, borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                decoration: const BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
                 child: Center(
-                  child: Text("Discount ${discount}%", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 10.0)),
+                  child: Text("Discount ${discount}%",
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10.0)),
                 ),
               )
             ],
@@ -1038,6 +1391,132 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Widget sevaCard(String image, title, caption, id, dropdownItem,
+    BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        InkWell(
+          onTap: () {},
+          child: Hero(
+            tag: 'hero-tag-$id',
+            child: Material(
+              child: Stack(
+                children: [
+                  // Container for the image with gradient
+                  Container(
+                    height: 220.0,
+                    width: 180.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 5.0,
+                          color: Colors.black12.withOpacity(0.1),
+                          spreadRadius: 2.0,
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          // Image
+                          Image.network(
+                            image,
+                            fit: BoxFit.cover,
+                          ),
+                          // Gradient Overlay
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.orange.withOpacity(0.9),
+                                  Colors.transparent,
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 220.0,
+                    width: 160.0,
+                    alignment: Alignment.bottomLeft,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          " $title",
+                          style: const TextStyle(
+                            fontFamily: "Sofia",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          width: 200,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 5, left: 5, bottom: 5),
+                            child: Text(
+                              caption,
+                              style: const TextStyle(
+                                fontFamily: "Sofia",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 10.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SevaDetail(dropdown_title: dropdownItem,)));
+                            },
+                            child: Text('Donate'),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.deepOrange.withOpacity(0.5)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(
+                                      color: Colors.orange.withOpacity(0.2)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
 
   Widget _recipeCard(String image, String title, String time, String calories) {
     return Padding(
@@ -1053,10 +1532,16 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 110.0,
               width: 180.0,
               decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover),
-                boxShadow: [const BoxShadow(blurRadius: 0.0, color: Colors.black87)],
+                image: DecorationImage(
+                    image: NetworkImage(image), fit: BoxFit.cover),
+                boxShadow: [
+                  const BoxShadow(blurRadius: 0.0, color: Colors.black87)
+                ],
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                gradient: const LinearGradient(colors: [Colors.white, Colors.white], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                gradient: const LinearGradient(
+                    colors: [Colors.white, Colors.white],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
               ),
             ),
           ),
@@ -1071,7 +1556,11 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 170.0,
             child: Text(
               title,
-              style: const TextStyle(color: Colors.black, fontFamily: "Sofia", fontSize: 16.0, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: "Sofia",
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -1097,7 +1586,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       time,
-                      style: const TextStyle(color: Colors.black45, fontFamily: "Sofia", fontSize: 14.0, fontWeight: FontWeight.w300),
+                      style: const TextStyle(
+                          color: Colors.black45,
+                          fontFamily: "Sofia",
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w300),
                     ),
                   ],
                 ),
@@ -1112,7 +1605,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       calories,
-                      style: const TextStyle(color: Colors.black45, fontFamily: "Sofia", fontSize: 14.0, fontWeight: FontWeight.w300),
+                      style: const TextStyle(
+                          color: Colors.black45,
+                          fontFamily: "Sofia",
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w300),
                     ),
                   ],
                 ),
@@ -1131,23 +1628,34 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const KLEntry()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const KLEntry()));
             },
             child: Container(
               height: 197.0,
               width: 98.0,
               decoration: const BoxDecoration(
-                  image: DecorationImage(image: NetworkImage("https://pbs.twimg.com/media/FiET6RNakAE-5_g?format=jpg&name=large"), fit: BoxFit.cover),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          "https://pbs.twimg.com/media/FiET6RNakAE-5_g?format=jpg&name=large"),
+                      fit: BoxFit.cover),
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               child: Container(
                 height: 197.0,
                 width: 95.0,
-                decoration: BoxDecoration(color: Colors.black12.withOpacity(0.2), borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                decoration: BoxDecoration(
+                    color: Colors.black12.withOpacity(0.2),
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(10.0))),
                 child: const Padding(
                   padding: EdgeInsets.only(top: 120.0, left: 10.0),
                   child: Text(
                     "Sri Krishna Lila",
-                    style: TextStyle(fontFamily: "Sofia", color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18.0),
+                    style: TextStyle(
+                        fontFamily: "Sofia",
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18.0),
                   ),
                 ),
               ),
@@ -1159,24 +1667,38 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ChaitanyaMahaPrabhuEntry()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const ChaitanyaMahaPrabhuEntry()));
                   },
                   child: Container(
                     height: 95.0,
                     width: _widht / 1.7,
                     decoration: const BoxDecoration(
-                        color: Colors.blue,
-                        image: DecorationImage(image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/1/14/Nitaigaurangaforwiki.jpg"), fit: BoxFit.cover),
+                        color: Colors.orange,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                "https://upload.wikimedia.org/wikipedia/commons/1/14/Nitaigaurangaforwiki.jpg"),
+                            fit: BoxFit.cover),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     child: Container(
                       height: 89.0,
                       width: _widht / 1.7,
-                      decoration: BoxDecoration(color: Colors.black12.withOpacity(0.4), borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                      decoration: BoxDecoration(
+                          color: Colors.black12.withOpacity(0.4),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0))),
                       child: const Padding(
                         padding: EdgeInsets.only(top: 60.0, left: 15.0),
                         child: Text(
                           "Sri Chaitanya Lila",
-                          style: TextStyle(fontFamily: "Sofia", color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18.0),
+                          style: TextStyle(
+                              fontFamily: "Sofia",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18.0),
                         ),
                       ),
                     ),
@@ -1187,13 +1709,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const PrabhupadaEntry()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PrabhupadaEntry()));
                   },
                   child: Container(
                     height: 95.0,
                     width: _widht / 1.7,
                     decoration: const BoxDecoration(
-                        color: Colors.blue,
+                        color: Colors.orange,
                         image: DecorationImage(
                             image: NetworkImage(
                                 "https://firebasestorage.googleapis.com/v0/b/hare-krishna-golden-temp-b1785.appspot.com/o/WhatsApp%20Image%202023-05-16%20at%202.06.09%20PM.jpeg?alt=media&token=7830f7a1-a74b-4153-98d1-1b92a9ff1a34"),
@@ -1202,12 +1727,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       height: 89.0,
                       width: _widht / 1.7,
-                      decoration: BoxDecoration(color: Colors.black12.withOpacity(0.4), borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+                      decoration: BoxDecoration(
+                          color: Colors.black12.withOpacity(0.4),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0))),
                       child: const Padding(
                         padding: EdgeInsets.only(top: 65.0, left: 15.0),
                         child: Text(
                           "Srila Prabhupada Lila",
-                          style: TextStyle(fontFamily: "Sofia", color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18.0),
+                          style: TextStyle(
+                              fontFamily: "Sofia",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18.0),
                         ),
                       ),
                     ),
@@ -1232,7 +1764,8 @@ class Library_Card extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4.0, right: 12.0, top: 8.0, bottom: 10.0),
+      padding:
+          const EdgeInsets.only(left: 4.0, right: 12.0, top: 8.0, bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -1242,24 +1775,33 @@ class Library_Card extends StatelessWidget {
             child: Container(
               width: 230.0,
               height: 135.0,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20), image: DecorationImage(image: NetworkImage(img!), fit: BoxFit.cover), color: Colors.white, boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF656565).withOpacity(0.15),
-                  blurRadius: 2.0,
-                  spreadRadius: 1.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                      image: NetworkImage(img!), fit: BoxFit.cover),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF656565).withOpacity(0.15),
+                      blurRadius: 2.0,
+                      spreadRadius: 1.0,
 //           offset: Offset(4.0, 10.0)
-                )
-              ]),
+                    )
+                  ]),
               child: Center(
                 child: Text(
                   txtTitle ?? "",
-                  style: TextStyle(fontFamily: 'Amira', color: Colors.white, fontSize: 59.0, letterSpacing: 2.0, shadows: [
-                    Shadow(
-                      color: Colors.black12.withOpacity(0.1),
-                      blurRadius: 2.0,
-                    )
-                  ]),
+                  style: TextStyle(
+                      fontFamily: 'Amira',
+                      color: Colors.white,
+                      fontSize: 59.0,
+                      letterSpacing: 2.0,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black12.withOpacity(0.1),
+                          blurRadius: 2.0,
+                        )
+                      ]),
                 ),
               ),
             ),

@@ -140,7 +140,7 @@ class _SongState extends State<Song> {
                 ),
                 SizedBox(height: 20,),
                 Slider(
-                  activeColor: Colors.orange,
+                  activeColor: Colors.blue,
                   thumbColor: Colors.white,
                   inactiveColor: Colors.white,
                   min: 0,
@@ -246,7 +246,7 @@ class _BackgroundFilter extends StatelessWidget {
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.deepOrange.shade500, Colors.orange])),
+                colors: [Colors.blue.shade500, Colors.blue])),
       ),
     );
   }

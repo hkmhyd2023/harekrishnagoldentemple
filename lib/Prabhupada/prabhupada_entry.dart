@@ -67,7 +67,7 @@ class _PrabhupadaEntryState extends State<PrabhupadaEntry> {
   @override
   Widget build(BuildContext context) {
     return _connectionStatus==ConnectivityResult.none? NoInternet() : Scaffold(
-      appBar: AppBar(title: const Text("Srila Prabhupada Lila"), backgroundColor: Colors.white,),
+      appBar: AppBar(title: const Text("Srila Prabhupada Lila", style: TextStyle(color: Colors.white),), backgroundColor: Colors.blue.shade300, ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [

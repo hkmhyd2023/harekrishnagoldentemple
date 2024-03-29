@@ -364,8 +364,8 @@ class _SettingsState extends State<Settings> {
     if (FirebaseAuth.instance.currentUser != null) {
       return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
-        backgroundColor: Colors.white,
+        title: Text("Profile", style: TextStyle(color: white),),
+        backgroundColor: Colors.blue.shade300,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -558,7 +558,7 @@ class _SettingsState extends State<Settings> {
                             children: [
                               Image.asset(
                                 'assets/gopuram.png',
-                                color: Colors.orange,
+                                color: Colors.blue,
                                 height: 40,
                                 width: 40,
                               ),
@@ -603,7 +603,7 @@ class _SettingsState extends State<Settings> {
                               topRight: Radius.circular(16),
                               bottomRight: Radius.circular(16),
                             ),
-                            color: Colors.orange,
+                            color: Colors.blue,
                           ),
                         )
                       ],
@@ -803,7 +803,7 @@ return Scaffold(
                             children: [
                               Image.asset(
                                 'assets/gopuram.png',
-                                color: Colors.orange,
+                                color: Colors.blue,
                                 height: 40,
                                 width: 40,
                               ),
@@ -848,7 +848,7 @@ return Scaffold(
                               topRight: Radius.circular(16),
                               bottomRight: Radius.circular(16),
                             ),
-                            color: Colors.orange,
+                            color: Colors.blue,
                           ),
                         )
                       ],

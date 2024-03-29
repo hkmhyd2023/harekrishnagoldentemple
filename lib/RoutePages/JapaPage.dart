@@ -195,7 +195,7 @@ class _JapaPageState extends State<JapaPage> {
               color: Colors.black, fontFamily: "Popins", fontSize: 17.0),
         ),
         centerTitle: true,
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
         backgroundColor: Colors.white,
         elevation: 0.0,
         iconTheme: IconThemeData(color: Colors.orange),

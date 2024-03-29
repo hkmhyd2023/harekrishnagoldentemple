@@ -92,15 +92,18 @@ class _YatraListState extends State<YatraList> {
   @override
   Widget build(BuildContext context) {
     return _connectionStatus==ConnectivityResult.none ? NoInternet() : Scaffold(
+      
       appBar: AppBar(
         title: Text("Yatras"),
+        
+        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
           child: Column(
         children: [
           SizedBox(
-            height: 40,
+            height: 20,
           ),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection("Yatras").snapshots(),
@@ -115,7 +118,6 @@ class _YatraListState extends State<YatraList> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: (1 / 1.5), mainAxisSpacing: 16, crossAxisSpacing: 16),
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.size,
-                padding: EdgeInsets.only(left: 2.4),
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   final DocumentSnapshot document = snapshot.data!.docs[index];

@@ -25,7 +25,7 @@ class _PrabhupadaQuotesState extends State<PrabhupadaQuotes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Quotes"), backgroundColor: Colors.white,),
+      appBar: AppBar(title: Text("Quotes", style: TextStyle(color: Colors.white),), backgroundColor: Colors.blue.shade300,),
       body: SingleChildScrollView(
         child: Column(
           children: [

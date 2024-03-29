@@ -154,29 +154,8 @@ class _LogInState extends State<LogIn> {
                         color: Colors.white)),
               ),
             ),
+            
             SizedBox(height: 20,),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(16),
-                  textStyle: TextStyle(fontSize: 16),
-                  shape: StadiumBorder(),
-                  elevation: 0,
-                  
-                  backgroundColor: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  NaviBottomNavBar()));
-                },
-                child: Text("Skip For Now",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.orange)),
-              ),
-            ),
-            SizedBox(height: 10,),
             Column(
   crossAxisAlignment: CrossAxisAlignment.center,
   mainAxisSize: MainAxisSize.max,

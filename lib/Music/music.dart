@@ -73,8 +73,8 @@ class _MusicState extends State<Music> {
 
     return _connectionStatus==ConnectivityResult.none? NoInternet() : Scaffold(
       appBar: AppBar(
-        title: Text("Music"),
-        backgroundColor: Colors.white,
+        title: Text("Music", style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.blue.shade300,
       ),
       body: SingleChildScrollView(
           child: Column(
@@ -223,7 +223,7 @@ class _MusicState extends State<Music> {
                                                 .textTheme
                                                 .bodyLarge!
                                                 .copyWith(
-                                                    color: Colors.orange,
+                                                    color: Colors.blue,
                                                     fontWeight:
                                                         FontWeight.bold),
                                           ),
@@ -242,7 +242,7 @@ class _MusicState extends State<Music> {
                                       ),
                                       const Icon(
                                         Icons.play_circle,
-                                        color: Colors.orange,
+                                        color: Colors.blue,
                                       )
                                     ],
                                   )),
@@ -347,7 +347,7 @@ width: 50,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
-                                      .copyWith(fontWeight: FontWeight.bold, color: Colors.orange),
+                                      .copyWith(fontWeight: FontWeight.bold, color: Colors.blue),
                                 ),
                                 Text(
                                   "Kirtans",
@@ -361,7 +361,7 @@ width: 50,
                             onPressed: () 
                             {Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ADP(documentSnapshot: document))));},
                             icon: const Icon(Icons.play_circle),
-                            color: Colors.orange,
+                            color: Colors.blue,
                           )
                         ]),
                       );

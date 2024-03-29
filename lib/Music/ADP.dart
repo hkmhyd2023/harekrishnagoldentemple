@@ -73,8 +73,8 @@ class _ADPState extends State<ADP> {
 
     return _connectionStatus==ConnectivityResult.none ? NoInternet() : Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(widget.documentSnapshot['Title']),
+        backgroundColor: Colors.blue.shade300,
+        title: Text(widget.documentSnapshot['Title'], style: TextStyle(color: Colors.white),),
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -202,7 +202,7 @@ class _ADPState extends State<ADP> {
                               ),
                               title: Text(
                                 document['Title'],
-                                style: TextStyle(color: Colors.orange),
+                                style: TextStyle(color: Colors.blue),
                               ),
                               subtitle: Text("${document['Likes']} Likes"),
                               trailing: GestureDetector(
@@ -211,7 +211,7 @@ class _ADPState extends State<ADP> {
                                 },
                                 child: Icon(
                                   Icons.play_circle,
-                                  color: Colors.orange,
+                                  color: Colors.blue,
                                 ),
                               )),
                         ),

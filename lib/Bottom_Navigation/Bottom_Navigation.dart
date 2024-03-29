@@ -99,7 +99,7 @@ class _NaviBottomNavBarState extends State<NaviBottomNavBar> {
             body: callPage(currentIndex),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.orange.shade300,
+              backgroundColor: Colors.orange.shade200,
               onPressed: () {
                 setState(() {
                   currentIndex = 4;

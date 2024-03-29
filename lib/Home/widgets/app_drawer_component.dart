@@ -7,6 +7,7 @@ import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart
 import 'package:harekrishnagoldentemple/Home/home.dart';
 import 'package:harekrishnagoldentemple/Prabhupada/prabhupada_entry.dart';
 import 'package:harekrishnagoldentemple/RoutePages/JapaPage.dart';
+import 'package:harekrishnagoldentemple/Seek_Divine_Blessings/YourSeva.dart';
 import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
 import 'package:harekrishnagoldentemple/faq_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -132,7 +133,7 @@ class AppDrawerComponent extends StatelessWidget {
                         title: Text('Sevas', style: primaryTextStyle()),
                         onTap: () {
                           finish(context);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ComingSoonPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => YourSevaList()));
                         },
                       ),
                       ListTile(
