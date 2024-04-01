@@ -56,7 +56,7 @@ class AppDrawerComponent extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 260),
+                padding: const EdgeInsets.only(bottom: 240),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,13 +180,13 @@ class AppDrawerComponent extends StatelessWidget {
                   Text('Hare Krishna Golden Temple', style: TextStyle(fontSize: 12),),
                   8.height,
                   TextIcon(
-                    edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
+                    edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 2),
                     prefix: Icon(Icons.call, size: 14),
                     text: "+91 04023326999",
                     textStyle: primaryTextStyle(size: 14),
                   ),
                   TextIcon(
-                    edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 4),
+                    edgeInsets: EdgeInsets.only(left: 0, right: 8, bottom: 4, top: 2),
                     prefix: Icon(Icons.web, size: 14),
                     text: "www.hkmhyderabad.org",
                     textStyle: primaryTextStyle(size: 14),

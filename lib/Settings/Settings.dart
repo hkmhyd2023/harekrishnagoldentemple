@@ -10,7 +10,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:harekrishnagoldentemple/Bottom_Navigation/Bottom_Navigation.dart';
 import 'package:harekrishnagoldentemple/Home/home.dart';
 import 'package:harekrishnagoldentemple/Home/widgets/app_drawer_component.dart';
-import 'package:harekrishnagoldentemple/Login/Login.dart';
 import 'package:harekrishnagoldentemple/Settings/BecomeVolunteer.dart';
 import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
 import 'package:harekrishnagoldentemple/faq_screen.dart';
@@ -19,6 +18,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:harekrishnagoldentemple/Login/Login.dart';
 
 class CustomDialogExample2 extends StatelessWidget {
   @override
@@ -365,7 +365,7 @@ class _SettingsState extends State<Settings> {
       return Scaffold(
       appBar: AppBar(
         title: Text("Profile", style: TextStyle(color: white),),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: Colors.orange.shade300,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -486,17 +486,6 @@ class _SettingsState extends State<Settings> {
                   size: 18, color: context.iconColor),
             ),
             SettingItemWidget(
-              leading: Icon(Icons.library_add, color: context.iconColor),
-              title: "My Playlist",
-              titleTextStyle: boldTextStyle(),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ComingSoonPage()));
-              },
-              trailing: Icon(Icons.arrow_forward_ios_rounded,
-                  size: 18, color: context.iconColor),
-            ),
-            SettingItemWidget(
               leading: Icon(Icons.handshake, color: context.iconColor),
               title: "Become a Volunteer",
               titleTextStyle: boldTextStyle(),
@@ -558,19 +547,19 @@ class _SettingsState extends State<Settings> {
                             children: [
                               Image.asset(
                                 'assets/gopuram.png',
-                                color: Colors.blue,
+                                color: Colors.orange,
                                 height: 40,
                                 width: 40,
                               ),
-                              8.height,
+                              4.height,
                               Text('HKM Hyderabad',
                                   style: boldTextStyle(size: 20)),
-                              8.height,
+                              4.height,
                               Text(
                                 'Hare Krishna Golden Temple',
                                 style: TextStyle(fontSize: 12),
                               ),
-                              8.height,
+                              4.height,
                               TextIcon(
                                 edgeInsets: EdgeInsets.only(
                                     left: 0, right: 8, bottom: 4, top: 4),
@@ -603,7 +592,7 @@ class _SettingsState extends State<Settings> {
                               topRight: Radius.circular(16),
                               bottomRight: Radius.circular(16),
                             ),
-                            color: Colors.blue,
+                            color: Colors.orange,
                           ),
                         )
                       ],
@@ -803,29 +792,29 @@ return Scaffold(
                             children: [
                               Image.asset(
                                 'assets/gopuram.png',
-                                color: Colors.blue,
+                                color: Colors.orange,
                                 height: 40,
                                 width: 40,
                               ),
-                              8.height,
+                              4.height,
                               Text('HKM Hyderabad',
                                   style: boldTextStyle(size: 20)),
-                              8.height,
+                              4.height,
                               Text(
                                 'Hare Krishna Golden Temple',
                                 style: TextStyle(fontSize: 12),
                               ),
-                              8.height,
+                              4.height,
                               TextIcon(
                                 edgeInsets: EdgeInsets.only(
-                                    left: 0, right: 8, bottom: 4, top: 4),
+                                    left: 0, right: 8, bottom: 2, top: 4),
                                 prefix: Icon(Icons.call, size: 14),
                                 text: "+91 04023326999",
                                 textStyle: primaryTextStyle(size: 14),
                               ),
                               TextIcon(
                                 edgeInsets: EdgeInsets.only(
-                                    left: 0, right: 8, bottom: 4, top: 4),
+                                    left: 0, right: 8, bottom: 2, top: 4),
                                 prefix: Icon(Icons.web, size: 14),
                                 text: "www.hkmhyderabad.org",
                                 textStyle: primaryTextStyle(size: 14),
@@ -848,7 +837,7 @@ return Scaffold(
                               topRight: Radius.circular(16),
                               bottomRight: Radius.circular(16),
                             ),
-                            color: Colors.blue,
+                            color: Colors.orange,
                           ),
                         )
                       ],

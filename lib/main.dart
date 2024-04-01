@@ -11,32 +11,24 @@ import 'package:harekrishnagoldentemple/Notifications.dart';
 import 'package:harekrishnagoldentemple/Settings/EditProfile.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:no_context_navigation/no_context_navigation.dart';
-
+ 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.instance.getToken().then((value) {
-    String? token = value;
-      print (token);
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+FirebaseMessaging.instance.getToken().then((value) {
+  String? token = value;
+  print (token);
+});
 
-  });
-
-  
-    Get.lazyPut(() => CarouselController());
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("FCM Message Received: ${message.notification?.title}");
-    // Handle the notification here
-  });
-
-  // Listen for when the user clicks on a push notification and the app is already open
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("FCM Message Opened: ${message.notification?.title}");
-navService.pushNamed('/notifications');  });
-
+Get.put(CarouselController());
       runApp(const MyApp());
   }
-
+  
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message: ${message.messageId}');
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -45,6 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser == null) {
       return MaterialApp(
+        
         title: 'Hare Krishna Golden Temple',
         debugShowCheckedModeBanner: false,
         navigatorKey: NavigationService.navigationKey,

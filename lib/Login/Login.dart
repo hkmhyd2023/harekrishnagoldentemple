@@ -78,20 +78,20 @@ class _LogInState extends State<LogIn> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Space(60),
+                SizedBox(height: 60),
                 Text("Hare Krishna 🙏🏻",
                     style: TextStyle(
                         fontSize: mainTitleTextSize,
                         fontWeight: FontWeight.bold)),
-                Space(8),
+                SizedBox(height: 8),
                 Text("Please Login to your account",
                     style: TextStyle(fontSize: 14, color: subTitle)),
-                Space(16),
+                SizedBox(height: 16),
                 Image.asset(gopuram,
                     width: 200, height: 200, fit: BoxFit.cover),
               ],
             ),
-            Space(70),
+            SizedBox(height: 70),
             Form(
               key: _loginFormKey,
               child: TextFormField(
@@ -119,7 +119,7 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
             ),
-            Space(16),
+            SizedBox(height: 16),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
@@ -130,13 +130,14 @@ class _LogInState extends State<LogIn> {
                   backgroundColor: true ? Colors.orange : Colors.orange,
                 ),
                 onPressed: () async {
+                  print("${_selectedCountry!.callingCode}${phonecontroller.text}");
                   await FirebaseAuth.instance.verifyPhoneNumber(
                     phoneNumber:
-                        "${_selectedCountry!.callingCode} ${phonecontroller.text}",
+                        "${_selectedCountry!.callingCode}${phonecontroller.text}",
                     verificationCompleted: (PhoneAuthCredential credential) {},
                     verificationFailed: (FirebaseAuthException e) {
-                      print (e.message);
-                    },
+                      print (" v failed ${e.message}");
+                     },
                     codeSent: (String verificationId, int? resendToken) {
                       LOTPVerificationScreen.verify=verificationId;
                       Navigator.push(

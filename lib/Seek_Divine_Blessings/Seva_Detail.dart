@@ -155,7 +155,7 @@ class _SevaDetailState extends State<SevaDetail> {
               begin: Alignment.bottomRight,
               end: Alignment.topCenter,
               colors: [
-                Colors.deepOrange.withOpacity(0.9),
+                Colors.orange.withOpacity(0.9),
                 Colors.white,
               ],
             ),
@@ -229,7 +229,7 @@ class _SevaDetailState extends State<SevaDetail> {
                             }).toList(),
                           ))),
     
-                  SizedBox(height: 40),
+                  SizedBox(height: 30),
                   Row(
                     children: [
                       Text(
@@ -268,7 +268,7 @@ class _SevaDetailState extends State<SevaDetail> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -299,7 +299,7 @@ class _SevaDetailState extends State<SevaDetail> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -395,9 +395,7 @@ class _SevaDetailState extends State<SevaDetail> {
                       )
                     ],
                   ),
-                  10.height,
                   SizedBox(
-                    height: 50,
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
@@ -406,7 +404,7 @@ class _SevaDetailState extends State<SevaDetail> {
                           'key': 'rzp_live_D28gZ8qbA5LRbq',
                           'amount': '${_selectedItemPrice.toInt()*100}' ,
                           'name': 'Hare Krishna Golden Temple',
-                          'description': 'Donating $_selectedItem',
+                          'description': 'Donating $_selectedItem to Hare Krishna Movement',
                           'retry': {'enabled': true, 'max_count': 10},
                           'send_sms_hash': true,
                           'prefill': {
@@ -436,7 +434,7 @@ class _SevaDetailState extends State<SevaDetail> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),
                         foregroundColor:
-                            MaterialStateProperty.all(Colors.black),
+                            MaterialStateProperty.all(Colors.deepOrangeAccent),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(

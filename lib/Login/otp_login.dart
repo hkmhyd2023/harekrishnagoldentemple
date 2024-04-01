@@ -95,7 +95,7 @@ class _LOTPVerificationScreenState extends State<LOTPVerificationScreen> {
                         fontSize: mainTitleTextSize,
                         fontWeight: FontWeight.bold),
                   ),
-                  Space(16),
+                  SizedBox(height: 16),
                   Text("We have sent OTP to your mobile number",
                       style: TextStyle(fontSize: 16, color: subTitle)),
                 ],
@@ -117,11 +117,12 @@ class _LOTPVerificationScreenState extends State<LOTPVerificationScreen> {
                       code = value;
                     },
                   ),
-                  Space(40),
+                  SizedBox(height: 40),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
                         padding: EdgeInsets.all(15),
                         textStyle: TextStyle(fontSize: 25),
                         shape: StadiumBorder(),

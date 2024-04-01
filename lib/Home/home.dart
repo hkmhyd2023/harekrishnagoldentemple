@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:marquee/marquee.dart' as marquee;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -147,20 +148,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: 'xw9gIA1jR7Q',
-  );
+  late YoutubePlayerController _controller;
+  late String imagelive;
 
-  
-List<String> runningTextList = [
-  'Your running text here',
-  'Your running text here',
-  'Your running text here',
-];
-   @override
+  @override
   void initState() {
     super.initState();
+    loadLiveLink();
+  }
 
+  Future<void> loadLiveLink() async {
+    try {
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection('LDL').doc('LDL').get();
+
+      if (userSnapshot.exists) {
+        String link = userSnapshot['Link'];
+        setState(() {
+          _controller = YoutubePlayerController(
+            initialVideoId: link,
+          );
+          imagelive = userSnapshot['Image'];
+        });
+      } else {
+        print("not found");
+      }
+    } catch (e) {
+      // Handle errors
+      print('Error loading user data: $e');
+    }
   }
 
   @override
@@ -319,7 +335,7 @@ List<String> runningTextList = [
                 }
                 return GestureDetector(
                   child: Container(
-                    height: 320,
+                    height: 240,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 9.0),
                       child: ListView.builder(
@@ -355,35 +371,148 @@ List<String> runningTextList = [
                 ],
               ),
             ),
-            ElevatedButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: YoutubePlayer(
-                          controller: _controller,
-                          showVideoProgressIndicator: true,
-                          progressIndicatorColor: Colors.blueAccent,
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('LDL')
+                  .doc('LDL')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Container(
+                    height: 270.0,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(80.0),
+                            topRight: Radius.circular(80.0)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black12.withOpacity(0.1),
+                              blurRadius: 3.0,
+                              spreadRadius: 1.0)
+                        ]),
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Container(
+                        width: double
+                            .infinity, // Adjust the width of the container according to your needs
+                        height:
+                            200, // Adjust the height of the container according to your needs
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                     
-                      
-                    ],
+                    ),
+                  );
+                }
+
+                final data = snapshot.data!.data() as Map<String, dynamic>?;
+                final imageUrl = data?['Image'] as String?;
+                if (imageUrl == null) {
+                  return const Center(child: Text('No image available'));
+                }
+
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: YoutubePlayer(
+                                  controller: _controller,
+                                  showVideoProgressIndicator: true,
+                                  progressIndicatorColor: Colors.blueAccent,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          imageBuilder: (context, imageProvider) => Container(
+                            height: 270,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0)),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                            ),
+                          ),
+                          height: 145,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20.0),
+                                  bottomRight: Radius.circular(20.0)),
+                                  
+                                  boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 5,
+        blurRadius: 7,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],),
+                          height: 50,
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: marquee.Marquee(
+                                        text: '4:30 AM Mangala - Ārati 🟠 4:45 AM Tulasi Puja 🟠 5:00 AM Narasimha Ārati 🟠 7:15 AM Shringara Darshan & Guru Puja 🟠 8:30 AM Srimad - Bhagavatam Class 🟠 11:30 AM Rajaboga - Arati 🟠 4:15 PM Dhupa - Arati 🟠 6:45 PM Tulasi - Arati 🟠 7:00 PM Sandhya - Arati 🟠 8:15 PM Shayna Arati',
+                                        style: TextStyle(fontSize: 20, color: Colors.deepOrange, fontWeight: FontWeight.w700),
+                                        scrollAxis: Axis.horizontal,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        blankSpace: 20.0,
+                                        velocity: 50.0,
+                                        pauseAfterRound: Duration(seconds: 1),
+                                        showFadingOnlyWhenScrolling: false,
+                                        fadingEdgeStartFraction: 0.1,
+                                        fadingEdgeEndFraction: 0.1,
+                                        numberOfRounds: 3,
+                                        startPadding: 10.0,
+                                        accelerationDuration: Duration(seconds: 1),
+                                        accelerationCurve: Curves.linear,
+                                        decelerationDuration: Duration(milliseconds: 500),
+                                        decelerationCurve: Curves.easeOut,
+                                      ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
-            );
-            // Start automatic scrolling after the widget is built
-           
-          },
-          child: Text('Open YouTube Video'),
-        ),
+            ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -1392,131 +1521,134 @@ List<String> runningTextList = [
     );
   }
 
-  Widget sevaCard(String image, title, caption, id, dropdownItem,
-    BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        InkWell(
-          onTap: () {},
-          child: Hero(
-            tag: 'hero-tag-$id',
-            child: Material(
-              child: Stack(
-                children: [
-                  // Container for the image with gradient
-                  Container(
-                    height: 220.0,
-                    width: 180.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 5.0,
-                          color: Colors.black12.withOpacity(0.1),
-                          spreadRadius: 2.0,
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          // Image
-                          Image.network(
-                            image,
-                            fit: BoxFit.cover,
-                          ),
-                          // Gradient Overlay
-                          Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.orange.withOpacity(0.9),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
+  Widget sevaCard(
+      String image, title, caption, id, dropdownItem, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          InkWell(
+            onTap: () {},
+            child: Hero(
+              tag: 'hero-tag-$id',
+              child: Material(
+                child: Stack(
+                  children: [
+                    // Container for the image with gradient
+                    Container(
+                      height: 220.0,
+                      width: 180.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5.0,
+                            color: Colors.black12.withOpacity(0.1),
+                            spreadRadius: 2.0,
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  Container(
-                    height: 220.0,
-                    width: 160.0,
-                    alignment: Alignment.bottomLeft,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          " $title",
-                          style: const TextStyle(
-                            fontFamily: "Sofia",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Container(
-                          width: 200,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 5, left: 5, bottom: 5),
-                            child: Text(
-                              caption,
-                              style: const TextStyle(
-                                fontFamily: "Sofia",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 10.0,
-                                color: Colors.white,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            // Image
+                            Image.network(
+                              image,
+                              fit: BoxFit.cover,
+                            ),
+                            // Gradient Overlay
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.orange.withOpacity(0.9),
+                                    Colors.transparent,
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SevaDetail(dropdown_title: dropdownItem,)));
-                            },
-                            child: Text('Donate'),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.deepOrange.withOpacity(0.5)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: BorderSide(
-                                      color: Colors.orange.withOpacity(0.2)),
+                      ),
+                    ),
+                    Container(
+                      height: 220.0,
+                      width: 160.0,
+                      alignment: Alignment.bottomLeft,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            " $title",
+                            style: const TextStyle(
+                              fontFamily: "Sofia",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 17.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Container(
+                            width: 200,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 5, left: 5, bottom: 5),
+                              child: Text(
+                                caption,
+                                style: const TextStyle(
+                                  fontFamily: "Sofia",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 10.0,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SevaDetail(
+                                          dropdown_title: dropdownItem,
+                                        )));
+                              },
+                              child: Text(
+                                'Donate',
+                                style: TextStyle(color: Colors.deepOrange),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.white),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(
+                                        color: Colors.orange.withOpacity(0.2)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-
+        ],
+      ),
+    );
+  }
 
   Widget _recipeCard(String image, String title, String time, String calories) {
     return Padding(
