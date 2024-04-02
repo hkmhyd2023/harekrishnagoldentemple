@@ -90,7 +90,7 @@ class _SDBLISState extends State<SDBLIS> {
                 return const Text('No data found');
               }
               return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: (1 / 1.5), mainAxisSpacing: 16, crossAxisSpacing: 16),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: (1 / 1.5),),
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.size,
                 shrinkWrap: true,
@@ -134,7 +134,7 @@ class _SDBLISState extends State<SDBLIS> {
 Widget sevaCard(String image, title, caption, id, dropdownTitle,
     BuildContext context) {
   return Padding(
-    padding: const EdgeInsets.only(left: 5
+    padding: const EdgeInsets.only(left: 2
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,

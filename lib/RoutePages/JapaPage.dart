@@ -232,7 +232,9 @@ class _JapaPageState extends State<JapaPage> {
                         labelColor: Colors.white,
                         unselectedLabelColor: Colors.white54,
                         indicator: ShapeDecoration.fromBoxDecoration(
+                          
                             BoxDecoration(
+                              
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15.0)),
                                 color: Colors.orange)),

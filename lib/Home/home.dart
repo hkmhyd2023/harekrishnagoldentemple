@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:harekrishnagoldentemple/Home/Ekadashi.dart';
 import 'package:marquee/marquee.dart' as marquee;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -179,10 +183,59 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  _redirectToPageTwo(String route, String dropdown_item) async {
+    if (route == "Ekadashi") {
+      DocumentSnapshot document = await FirebaseFirestore.instance
+          .collection('Upcoming-Event')
+          .doc('mP1nsNtfs4wDbLIcaATu')
+          .get();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EkadashiDetail(
+                    image_url: document['Main-Image'],
+                    title: document['Title'],
+                    date: document['Date'],
+                    description: document['Description'],
+                  )));
+    } else if (route == "Japa") {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => JapaPage()));
+    } else if (route == "Live") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: YoutubePlayer(
+                controller: _controller,
+                showVideoProgressIndicator: true,
+                progressIndicatorColor: Colors.blueAccent,
+              ));
+        },
+      );
+    } else if (route == "Seva") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SevaDetail(dropdown_title: dropdown_item)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String user_name = "";
+    FirebaseMessaging.instance.getToken().then((token) {
+      print(token);
+    });
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _redirectToPageTwo(message.data['Route'], message.data['Dropdown_Item']);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _redirectToPageTwo(message.data['Route'], message.data['Dropdown_Item']);
+    });
     if (FirebaseAuth.instance.currentUser?.displayName == null) {
       user_name = "User Name";
     } else {
@@ -421,20 +474,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: YoutubePlayer(
-                                  controller: _controller,
-                                  showVideoProgressIndicator: true,
-                                  progressIndicatorColor: Colors.blueAccent,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                            contentPadding: EdgeInsets.zero,
+                            content: YoutubePlayer(
+                              controller: _controller,
+                              showVideoProgressIndicator: true,
+                              progressIndicatorColor: Colors.blueAccent,
+                            ));
                       },
                     );
                   },
@@ -470,41 +515,44 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20.0),
-                                  bottomRight: Radius.circular(20.0)),
-                                  
-                                  boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 5,
-        blurRadius: 7,
-        offset: Offset(0, 3), // changes position of shadow
-      ),
-    ],),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
                           height: 50,
                           width: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: marquee.Marquee(
-                                        text: '4:30 AM Mangala - Ārati 🟠 4:45 AM Tulasi Puja 🟠 5:00 AM Narasimha Ārati 🟠 7:15 AM Shringara Darshan & Guru Puja 🟠 8:30 AM Srimad - Bhagavatam Class 🟠 11:30 AM Rajaboga - Arati 🟠 4:15 PM Dhupa - Arati 🟠 6:45 PM Tulasi - Arati 🟠 7:00 PM Sandhya - Arati 🟠 8:15 PM Shayna Arati',
-                                        style: TextStyle(fontSize: 20, color: Colors.deepOrange, fontWeight: FontWeight.w700),
-                                        scrollAxis: Axis.horizontal,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        blankSpace: 20.0,
-                                        velocity: 50.0,
-                                        pauseAfterRound: Duration(seconds: 1),
-                                        showFadingOnlyWhenScrolling: false,
-                                        fadingEdgeStartFraction: 0.1,
-                                        fadingEdgeEndFraction: 0.1,
-                                        numberOfRounds: 3,
-                                        startPadding: 10.0,
-                                        accelerationDuration: Duration(seconds: 1),
-                                        accelerationCurve: Curves.linear,
-                                        decelerationDuration: Duration(milliseconds: 500),
-                                        decelerationCurve: Curves.easeOut,
-                                      ),
+                              text:
+                                  '4:30 AM Mangala - Ārati 🟠 4:45 AM Tulasi Puja 🟠 5:00 AM Narasimha Ārati 🟠 7:15 AM Shringara Darshan & Guru Puja 🟠 8:30 AM Srimad - Bhagavatam Class 🟠 11:30 AM Rajaboga - Arati 🟠 4:15 PM Dhupa - Arati 🟠 6:45 PM Tulasi - Arati 🟠 7:00 PM Sandhya - Arati 🟠 8:15 PM Shayna Arati',
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.deepOrange),
+                              scrollAxis: Axis.horizontal,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              blankSpace: 20.0,
+                              velocity: 50.0,
+                              pauseAfterRound: Duration(seconds: 1),
+                              showFadingOnlyWhenScrolling: false,
+                              fadingEdgeStartFraction: 0.1,
+                              fadingEdgeEndFraction: 0.1,
+                              numberOfRounds: 100,
+                              startPadding: 10.0,
+                              accelerationDuration: Duration(seconds: 1),
+                              accelerationCurve: Curves.linear,
+                              decelerationDuration: Duration(milliseconds: 500),
+                              decelerationCurve: Curves.easeOut,
+                            ),
                           ),
                         ),
                       ],
@@ -768,108 +816,124 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       final DocumentSnapshot document =
                           snapshot.data!.docs[index];
-                      return Container(
-                        width: 300,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 10.0),
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              margin: const EdgeInsets.only(left: 46.0),
-                              decoration: BoxDecoration(
-                                color: context.scaffoldBackgroundColor,
-                                shape: BoxShape.rectangle,
-                                boxShadow: <BoxShadow>[
-                                  const BoxShadow(
-                                      color: Color(0x95E9EBF0),
-                                      blurRadius: 0.5,
-                                      spreadRadius: 0.5),
-                                ],
-                                borderRadius: BorderRadius.circular(40.0),
-                              ),
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    left: 55.0, right: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(document["Title"],
-                                        style: primaryTextStyle(
-                                            color: const Color(0xFFfc4a1a)),
-                                        maxLines: 2),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(document["Date"],
-                                            style: primaryTextStyle(
-                                                color: const Color(0xFF8BC34A),
-                                                size: 16)),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      children: <Widget>[
-                                        CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                document["Gopuram-Image"]),
-                                            radius: 20),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text("Fast Break",
-                                                  style: primaryTextStyle()),
-                                              Text(document['fast-break'],
-                                                  style: secondaryTextStyle(
-                                                      size: 12)),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    )
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EkadashiDetail(
+                                        image_url: document['Main-Image'],
+                                        title: document['Title'],
+                                        date: document['Date'],
+                                        description: document['Description'],
+                                      )));
+                        },
+                        child: Container(
+                          width: 300,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 10.0),
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                margin: const EdgeInsets.only(left: 46.0),
+                                decoration: BoxDecoration(
+                                  color: context.scaffoldBackgroundColor,
+                                  shape: BoxShape.rectangle,
+                                  boxShadow: <BoxShadow>[
+                                    const BoxShadow(
+                                        color: Color(0x95E9EBF0),
+                                        blurRadius: 0.5,
+                                        spreadRadius: 0.5),
                                   ],
+                                  borderRadius: BorderRadius.circular(40.0),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              alignment: FractionalOffset.centerLeft,
-                              child: CachedNetworkImage(
-                                imageUrl: document['Main-Image'],
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  width: 80.0,
-                                  height: 40.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(48),
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ),
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                      left: 55.0, right: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(document["Title"],
+                                          style: primaryTextStyle(
+                                              color: const Color(0xFFfc4a1a)),
+                                          maxLines: 2),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(document["Date"],
+                                              style: primaryTextStyle(
+                                                  color:
+                                                      const Color(0xFF8BC34A),
+                                                  size: 16)),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: <Widget>[
+                                          CircleAvatar(
+                                              backgroundImage: AssetImage(
+                                                  document["Gopuram-Image"]),
+                                              radius: 20),
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text("Fast Break",
+                                                    style: primaryTextStyle()),
+                                                Text(document['fast-break'],
+                                                    style: secondaryTextStyle(
+                                                        size: 12)),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
                                   ),
                                 ),
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    width: 80,
-                                    height: 40,
+                              ),
+                              Container(
+                                alignment: FractionalOffset.centerLeft,
+                                child: CachedNetworkImage(
+                                  imageUrl: document['Main-Image'],
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    width: 80.0,
+                                    height: 40.0,
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(48.0),
+                                      borderRadius: BorderRadius.circular(48),
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade300,
+                                    highlightColor: Colors.grey.shade100,
+                                    child: Container(
+                                      width: 80,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(48.0),
+                                      ),
+                                    ),
+                                  ),
+                                  height: 80,
                                 ),
-                                height: 80,
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -972,7 +1036,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      height: 300,
+                      height: 287,
                     ),
                   ),
                 );
@@ -1624,8 +1688,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(color: Colors.deepOrange),
                               ),
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.white),
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(

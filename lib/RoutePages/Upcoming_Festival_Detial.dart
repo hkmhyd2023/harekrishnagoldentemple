@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:harekrishnagoldentemple/NoInternet.dart';
+import 'package:harekrishnagoldentemple/Seek_Divine_Blessings/Seek_Divine_Blessings_LIS.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -167,13 +168,15 @@ class _Upcoming_Festival_DetailState extends State<Upcoming_Festival_Detail> {
                     ),
 
                     /// Button
-                    Padding(
+                   Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: () async {},
+                            onTap: () async {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const SDBLIS())); 
+                            },
                             child: Container(
                               height: 55.0,
                               width: MediaQuery.of(context).size.width / 1.1,
@@ -187,8 +190,8 @@ class _Upcoming_Festival_DetailState extends State<Upcoming_Festival_Detail> {
                                       tileMode: TileMode.clamp)),
                               child: Center(
                                 child: Text(
-                                  "Know More ",
-                                  style: TextStyle(color: Colors.white, fontSize: 19.0, fontFamily: "Sofia", fontWeight: FontWeight.w600),
+                                  "Offer Seva",
+                                  style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 19.0, fontFamily: "Sofia", fontWeight: FontWeight.w600),
                                 ),
                               ),
                             ),
